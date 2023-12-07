@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "986844355796",
+    "project_id": "orphanagrmanagement",
+    "storage_bucket": "orphanagrmanagement.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986844355796:android:c3841933036db73513ef41",
+        "android_client_info": {
+          "package_name": "com.example.orphanagemanagement"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAP1LpH3hlUJKhEt6CI5vgMjRMQ6yMYfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
