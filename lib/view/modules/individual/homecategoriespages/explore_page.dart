@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:orphanagemanagement/model/orphanage/orphn_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_textfield.dart';
 import 'package:orphanagemanagement/view/modules/individual/explre_singleorphanage_page.dart';
 import 'package:orphanagemanagement/view/modules/individual/main_page_individual.dart';
+import 'package:orphanagemanagement/viewmodel/firestore.dart';
+import 'package:provider/provider.dart';
 
 class ExplorePageInHomeIndividual extends StatefulWidget {
   const ExplorePageInHomeIndividual({super.key});
@@ -19,57 +24,72 @@ class _ExplorePageInHomeIndividualState
     extends State<ExplorePageInHomeIndividual> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<FireStore>(context, listen: false).fetchAllOrphanages();
+
+    // storeInstence.fetchAllOrphanages();
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-        body: Container(
-          height: hight,
-          width: width,
-          margin: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Gap(60),
-              customeText(text: "Home", size: 26),
-              Gap(20),
-              customeTextField(
-                prefixicon: Image.asset(
-                  "assets/search.png",
-                  scale: 20,
-                ),
-                radius: 30,
-                fillcolor: appThemeGrey,
-                hintText: 'Search an orphanage',
-              ),
-              const Gap(20),
-              IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: Image.asset(
-                    "assets/leftarrow.png",
+        body: Consumer<FireStore>(builder: (context, firestore, child) {
+          
+          return Container(
+            height: hight,
+            width: width,
+            margin: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Gap(60),
+                customeText(text: "Home", size: 26),
+                Gap(20),
+                customeTextField(
+                  prefixicon: Image.asset(
+                    "assets/search.png",
                     scale: 20,
-                  )),
-              customeText(text: "Explore", size: 22),
-              const Gap(15),
-              Expanded(
-                  child: ListView.separated(
-                      itemBuilder: (context, index) => exploreOrphanages(
-                          onTap: () {
-                            Get.to(ExploreSingleOrphanagePafeIndividual());
-                          },
-                          hight: hight,
-                          width: width,
-                          orphnName: "Orphane Nmae",
-                          numOfChile: "Number of Child",
-                          contNumber: "context niumber",
-                          srcimg:
-                              "https://s3-alpha-sig.figma.com/img/fa20/bc06/2deb16afff00b283a126f9a481cc148d?Expires=1702252800&Signature=b9iRbTh9yLYbkE68~FSYMaDa1Lh0zzqNV-a8IKciexYYuYXp9AE5XJR93u0JQD1x9ph6AeCYAB65t7vda58fNOWEaYXU5FOH9LxGT-GfbUZKhC-6hUowW2gUnOk5AqUJnFoVB5l3XaKvnZBqhaZ7aY3N2lxcVbXi5pYWzgqIfjP5lFHPgEbhCognYoZue3tiN5vDA3iEyv3MqndDFyFsmMmwEasEzFP~DnpLP1fFULJaY3G7ioA09B~g5vBzaJXVFQH~eN-GKvminC5FKqQtu4cWRoGu7uWdKfPNX4jANk0IZJdu4PW1PFqvkayprGEI0d4j1y8Uzw1OjjeHJh179g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"),
-                      separatorBuilder: (context, index) => Gap(20),
-                      itemCount: 3))
-            ],
-          ),
-        ),
+                  ),
+                  radius: 30,
+                  fillcolor: appThemeGrey,
+                  hintText: 'Search an orphanage',
+                ),
+                const Gap(20),
+                IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Image.asset(
+                      "assets/leftarrow.png",
+                      scale: 20,
+                    )),
+                customeText(text: "Explore", size: 22),
+                const Gap(15),
+                Expanded(
+                    child: ListView.separated(
+                        itemBuilder: (context, index) => exploreOrphanages(
+                            onTap: () {
+                              Get.to(ExploreSingleOrphanagePafeIndividual(
+                                orphnId: firestore.orphanageList[index].orphnId,
+                              ));
+                            },
+                            hight: hight,
+                            width: width,
+                            orphnName: firestore.orphanageList[index].orphnName,
+                            numOfChile: firestore
+                                .orphanageList[index].childCount
+                                .toString(),
+                            contNumber: firestore
+                                .orphanageList[index].contactNumber
+                                .toString(),
+                            srcimg:
+                                firestore.orphanageList[index].image!.isEmpty
+                                    ? imageNotFound
+                                    : NetworkImage(
+                                        firestore.orphanageList[index].image!)),
+                        separatorBuilder: (context, index) => Gap(20),
+                        itemCount: firestore.orphanageList.length))
+              ],
+            ),
+          );
+        }),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           onTap: (index) {
@@ -118,7 +138,7 @@ class _ExplorePageInHomeIndividualState
       orphnName,
       numOfChile,
       contNumber,
-      required String srcimg,
+      required dynamic srcimg,
       Function()? onTap}) {
     return InkWell(
       onTap: onTap,
@@ -135,14 +155,13 @@ class _ExplorePageInHomeIndividualState
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
-                  height: 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      srcimg,
-                    ),
-                  ),
+                Container(
+                  height: 90,
+                  width: 90,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      // borderRadius: BorderRadius.circular(50),
+                      image: DecorationImage(image: srcimg)),
                 ),
               ],
             ),

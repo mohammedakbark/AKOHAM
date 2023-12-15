@@ -11,13 +11,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:orphanagemanagement/model/other/child_detail_model.dart';
+import 'package:orphanagemanagement/model/other_models/child_detail_model.dart';
+import 'package:orphanagemanagement/model/other_models/child_helath_report.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/blank_textfield.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
+import 'package:orphanagemanagement/view/modules/orphanage/main_page_orphanage.dart';
+import 'package:orphanagemanagement/view/modules/orphanage/tabs/childdetails_tab.dart';
 import 'package:orphanagemanagement/viewmodel/firestore.dart';
 
 class AddChildOrphanage extends StatefulWidget {
@@ -30,31 +35,31 @@ class AddChildOrphanage extends StatefulWidget {
 class _AddChildOrphanageState extends State<AddChildOrphanage> {
   TabController? tabcroller;
   FireStore fireStore = FireStore();
-  TextFormField name = TextFormField();
-  TextFormField nickname = TextFormField();
-  TextFormField age = TextFormField();
+  TextEditingController name = TextEditingController();
+  TextEditingController nickname = TextEditingController();
+  TextEditingController age = TextEditingController();
 
-  TextFormField birthDay = TextFormField();
-  TextFormField birthMonth = TextFormField();
-  TextFormField birthYear = TextFormField();
+  TextEditingController birthDay = TextEditingController();
+  TextEditingController birthMonth = TextEditingController();
+  TextEditingController birthYear = TextEditingController();
 
-  TextFormField joinday = TextFormField();
-  TextFormField joinmonth = TextFormField();
-  TextFormField joinYear = TextFormField();
+  TextEditingController joinday = TextEditingController();
+  TextEditingController joinmonth = TextEditingController();
+  TextEditingController joinYear = TextEditingController();
 
-  TextFormField location = TextFormField();
-  TextFormField bloodGroup = TextFormField();
+  TextEditingController location = TextEditingController();
+  TextEditingController bloodGroup = TextEditingController();
   ///////
-  TextFormField medicalStatus = TextFormField();
-  TextFormField diseases = TextFormField();
-  TextFormField disabilitiess = TextFormField();
-  TextFormField hight = TextFormField();
-  TextFormField weight = TextFormField();
-  TextFormField medicines = TextFormField();
+  TextEditingController medicalStatus = TextEditingController();
+  TextEditingController diseases = TextEditingController();
+  TextEditingController disabilitiess = TextEditingController();
+  TextEditingController childHight = TextEditingController();
+  TextEditingController childWeight = TextEditingController();
+  TextEditingController medicines = TextEditingController();
 
   String? selectedType;
   String? selectedStatus;
-  String? gender;
+  String gender ="Female";
 
   bool isExpanded = false;
 
@@ -85,9 +90,12 @@ class _AddChildOrphanageState extends State<AddChildOrphanage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        Image.network(
-                          "https://s3-alpha-sig.figma.com/img/24ab/5518/d7c0717b33be2972fd5961a68ce64f6e?Expires=1702252800&Signature=QjStQLGE6H1-jL06bmiCvIkvFBY-8juw~0A6DXUHDa9nuVRduEl8r23QR66krGJZllPEQQ4eKErKkkwL1-WWXZfiI~WxpPj-9eoNPZ-OV~CV1xLgJP1p8Ot6DfgtqVyiQoTYudkaQcPi0z1ctcCsbL~evX7i1MANITbXZhdhYXVSYtSNCMxH7BUS-vWlVzAuabbLF9khL7qeDvHAr9bMTFi3d0vceL2nVsmI2m5MNGQ1lvk59an4~1vBwjzjAjeekrjiGwLvllsCGZbMDQeIf9wE7aE4QaR1BcmD4IEzDyxMZiKL0BFeBhL8YcK-L2n1zChGZ7NJBxu6olSZPR9jow__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                          scale: 1.5,
+                        Container(
+                          height: 70,
+                          width: 70,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              image: const DecorationImage(image: userImage)),
                         ),
                         InkWell(
                           onTap: () {},
@@ -154,9 +162,18 @@ class _AddChildOrphanageState extends State<AddChildOrphanage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              BlankTextField(context: context, hintText: ""),
-                              BlankTextField(context: context, hintText: ""),
-                              BlankTextField(context: context, hintText: ""),
+                              BlankTextField(
+                                  context: context,
+                                  hintText: "",
+                                  controller: name),
+                              BlankTextField(
+                                  context: context,
+                                  hintText: "",
+                                  controller: nickname),
+                              BlankTextField(
+                                  context: context,
+                                  hintText: "",
+                                  controller: age),
                               Container(
                                 decoration: BoxDecoration(
                                     border: Border.all(),
@@ -165,6 +182,7 @@ class _AddChildOrphanageState extends State<AddChildOrphanage> {
                                 height: 30,
                                 // width: 100,
                                 child: TabBar(
+                                
                                     onTap: (index) {
                                       if (index == 0) {
                                         gender = "Female";
@@ -193,20 +211,22 @@ class _AddChildOrphanageState extends State<AddChildOrphanage> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   BlankTextField(
-                                    fielSize: 40,
-                                    context: context,
-                                    hintText: "Day",
-                                  ),
+                                      fielSize: 40,
+                                      context: context,
+                                      hintText: "Day",
+                                      controller: birthDay),
                                   customeText(text: "/", textcolor: grey600),
                                   BlankTextField(
                                       fielSize: 40,
                                       context: context,
-                                      hintText: "Date"),
+                                      hintText: "Month",
+                                      controller: birthMonth),
                                   customeText(text: "/", textcolor: grey600),
                                   BlankTextField(
                                       fielSize: 40,
                                       context: context,
-                                      hintText: "Year"),
+                                      hintText: "Year",
+                                      controller: birthYear),
                                 ],
                               ),
                               Row(
@@ -214,26 +234,34 @@ class _AddChildOrphanageState extends State<AddChildOrphanage> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   BlankTextField(
-                                    fielSize: 40,
-                                    context: context,
-                                    hintText: "Day",
-                                  ),
+                                      fielSize: 40,
+                                      context: context,
+                                      hintText: "Day",
+                                      controller: joinday),
                                   customeText(text: "/", textcolor: grey600),
                                   BlankTextField(
                                       fielSize: 40,
                                       context: context,
-                                      hintText: "Date"),
+                                      hintText: "Month",
+                                      controller: joinmonth),
                                   customeText(text: "/", textcolor: grey600),
                                   BlankTextField(
                                       fielSize: 40,
                                       context: context,
-                                      hintText: "Year"),
+                                      hintText: "Year",
+                                      controller: joinYear),
                                 ],
                               ),
                               // BlankTextField(
                               // context: context, hintText: "day/dat/year"),
-                              BlankTextField(context: context, hintText: ""),
-                              BlankTextField(context: context, hintText: ""),
+                              BlankTextField(
+                                  context: context,
+                                  hintText: "",
+                                  controller: location),
+                              BlankTextField(
+                                  context: context,
+                                  hintText: "",
+                                  controller: bloodGroup),
                               DropdownButton<String>(
                                 // style: GoogleFonts.jua(),
                                 value: selectedType,
@@ -324,12 +352,30 @@ class _AddChildOrphanageState extends State<AddChildOrphanage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                BlankTextField(context: context, hintText: ""),
-                                BlankTextField(context: context, hintText: ""),
-                                BlankTextField(context: context, hintText: ""),
-                                BlankTextField(context: context, hintText: ""),
-                                BlankTextField(context: context, hintText: ""),
-                                BlankTextField(context: context, hintText: ""),
+                                BlankTextField(
+                                    context: context,
+                                    hintText: "",
+                                    controller: medicalStatus),
+                                BlankTextField(
+                                    context: context,
+                                    hintText: "",
+                                    controller: diseases),
+                                BlankTextField(
+                                    context: context,
+                                    hintText: "",
+                                    controller: disabilitiess),
+                                BlankTextField(
+                                    context: context,
+                                    hintText: "",
+                                    controller: childHight),
+                                BlankTextField(
+                                    context: context,
+                                    hintText: "",
+                                    controller: childWeight),
+                                BlankTextField(
+                                    context: context,
+                                    hintText: "",
+                                    controller: medicines),
                               ],
                             )
                           ],
@@ -343,7 +389,10 @@ class _AddChildOrphanageState extends State<AddChildOrphanage> {
                   width: width * .45,
                   height: hight * .05,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await addchild();
+                      Get.to(ChildDetailsTabOrphanage());
+                    },
                     style: ButtonStyle(
                       backgroundColor: const MaterialStatePropertyAll(black),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
@@ -360,10 +409,42 @@ class _AddChildOrphanageState extends State<AddChildOrphanage> {
       ),
     );
   }
-  addchild(){
-    // fireStore.addChildToFirestore(childDataRegModel)
 
+  String datePicker(String day, String month, String year) {
+    String date = "${day}/${month}/${year}";
+    print(date);
+    return date;
+  }
 
-
+  addchild() async {
+    int ager = int.parse(age.text);
+    try {
+      await fireStore.addChildToFirestore(
+          ChildDataRegModel(
+           
+              image: "",
+              adoptionStatus: selectedStatus.toString(),
+              age: ager,
+              bloodGroup: bloodGroup.text,
+              dirthdate:
+                  datePicker(birthDay.text, birthMonth.text, birthYear.text),
+              gender: gender,
+              joinDate: datePicker(joinday.text, joinmonth.text, joinYear.text),
+              location: location.text,
+              name: name.text,
+              nickNmae: nickname.text,
+              orphanType: selectedType.toString()),
+          ChildHealthReportModel(
+              disabilities: disabilitiess.text,
+              diseases: diseases.text,
+              heght: childHight.text,
+              medicalStatus: medicalStatus.text,
+              medicines: medicines.text,
+              weight: childWeight.text));
+    } catch (e) {
+      return Get.showSnackbar(GetSnackBar(
+        message: "$e",
+      ));
+    }
   }
 }

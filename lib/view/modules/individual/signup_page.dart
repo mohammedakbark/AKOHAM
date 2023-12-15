@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:orphanagemanagement/model/other_models/login_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custom_button.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_gradient_button.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
@@ -38,9 +40,11 @@ class SignPageIndividual extends StatelessWidget {
                 Gap(30),
                 customeText(
                     text: "Careconnect", size: 36, fontWeight: FontWeight.w500),
-                Image.network(
-                  "https://s3-alpha-sig.figma.com/img/7dcb/500f/3e806c800ca3f6ed0f875958a0bccd24?Expires=1702252800&Signature=UhFWjqX2otME3Zbo5vshbtkNPSbauxkg8lfAKQOB9MRuVO4ljf-zkDeadSLV8QiAFcXpD61ACYk1rcnt-eKBb2HOdA1t05xfkUZML2A-4XYzbi3GxAuMd64W2qTOAcghB2rD7glYqVGxnPVtBLhOAR~NeATYTp84e043sChLXKqPlgShEkGNUazhPQOq1zdkrBIFLe9FQ~3af~t4vBMKpYwB8omJA-Mqk2qmOFfZ105XW35Us3w8U315Ey5esxSVlIia5SOiBrd0-bbeq~EI8CAiZudh5ikhDsYkjhdjm3stdeua3g8KROQfFFnh4Cy263sujOpZx8LsHYUP8Ehs7Q__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                  scale: 10,
+                Container(
+                  height: 200,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/sig_up.png"))),
                 ),
                 Gap(20),
                 Container(
@@ -130,14 +134,23 @@ class SignPageIndividual extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * .5,
                   child: customeGradientButtom(
-                    onpressed: () {
+                    onpressed: () async {
                       if (_formKey.currentState!.validate()) {
                         firebaseAuths.sign(
                           emailController.text,
                           passwordController.text,
                           context,
                         );
-                        Get.to(NextSignPageIndividual());
+                        await storeInstence.addUsertoLoginTable(
+                            firebaseAuths.uid,
+                            LoginTable(
+                                email: emailController.text,
+                                loginId: firebaseAuths.uid!,
+                                type: "Individual"));
+                        Get.to(NextSignPageIndividual(
+                          email: emailController,
+                          uid: firebaseAuths.uid!,
+                        ));
                       }
                     },
                     context: context,

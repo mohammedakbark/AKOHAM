@@ -1,17 +1,19 @@
 class IndivRegModel {
-  // int? senderId;
+  dynamic senderId;
   //
-  String? name;
-  int? contactNumber;
-  String? email;
-  String? location;
+  String name;
+  int contactNumber;
+  String email;
+  String location;
 
-  // int? loginId;
+  String ?loginId;
 
-  // Image? image;
+  String image;
 
   IndivRegModel({
-    // required this.senderId,
+    this.loginId,
+    this.senderId,
+    required this.image,
     required this.name,
     required this.contactNumber,
     required this.email,
@@ -19,14 +21,22 @@ class IndivRegModel {
     required this.location,
   });
 
-  Map<String, dynamic> toJson() => {
-        "orphnName": name,
+  Map<String, dynamic> toJson(id) => {
+    "image":image,
+    "loginId":loginId,
+        "senderId": id,
+        "name": name,
         "contactNumber": contactNumber,
         "email": email,
         "location": location,
       };
+  factory IndivRegModel.fromJson(Map<String, dynamic> json) => IndivRegModel(
+    image: json["image"],
+    loginId: json["loginId"],
+        senderId: json["senderId"],
+        name: json["name"],
+        contactNumber: json["contactNumber"],
+        email: json["email"],
+        location: json["location"],
+      );
 }
-// factory Modell.fromJson(Map<String, dynamic> json) =>
-//       Modell(first: json["first"], second: json["second"]);
-
-//   Map<String, dynamic> toJson() => {"first": first, "second": second};

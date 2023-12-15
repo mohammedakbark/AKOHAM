@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
+import 'package:orphanagemanagement/viewmodel/services_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:tabbar_gradient_indicator/tabbar_gradient_indicator.dart';
 
 class NotificationTabIndividual extends StatefulWidget {
@@ -15,17 +19,16 @@ class NotificationTabIndividual extends StatefulWidget {
 
 class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
   int initialIndex = 0;
-  String time = DateFormat('h:mm a').format(DateTime.now());
-  String day = DateFormat('EEEE').format(DateTime.now());
-  String date = DateFormat("dd/m/yyyy").format(DateTime.now());
-  List<String> imageSrc = [
-    "https://s3-alpha-sig.figma.com/img/e9d5/d743/540e9feb09e3586ba71347d6e8289682?Expires=1702252800&Signature=SwcG8GlEjo-rlgaZ2ir1ZVV3l8ZTc-Mmnx2NgHQLu8uGLMLHeYq5GZHTob-GIv9l-8EOakqIhvyi0SohCwD0aQKLI-14Ke1hfsiCkIuJGVl2AouNBVs~b5hB9s8~oXKasphFV9KUFR5A8yvCprJQvNMPUELa44twjXV1x~CuonplrtFeeZdeDYPOXvI9d38QBiIPKnYleEPaeC86-hSaT~iEqAefjI8AZb-REUlqnmBvrx7mhinfNQXJR66oX~HG8muQu3Uee4TrN~Gciy37zJVS-DgaDIbrw6O2RLbey~sdn4AtBEiVg-x3w-oodSJOEcQRXoeTOWPgmLq7jEisJg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4", // scale: 30,
-    "https://s3-alpha-sig.figma.com/img/c899/5d1c/5fe610ac7641430bf5258d5c43a78413?Expires=1702252800&Signature=OBtdekXOTC2kkif~pxccggze-68X7Yo~1PPHYpmJU-cJXSGlqCmc8ZYzp-fL8BbxoVxvANuJmCt3D3JNNZ3zO3X2VzyJ-Pr5sAP4wtOxIrCP3hh3WTv3u-ramxgVKnWrGoU7LXEuxxw7RQ0z15lTIZPHjTj7hHE~H5LaPS-P-1WTzAxzZ2DeGDpLCwp8D16-VbAvNWQ60qgyrLWc7UJcUt551AodkZyxwzeET7BTvzblPUkkOmKH~hyHeinuET2IMRYs~VkOnenQr~NTXsawWzvCMSpUGZ8RLYiXaLmxlsxPd58djOqb0G4c6Y-AKn6uNpCS9NqnG0QpzRfi7OGO8g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-    "https://s3-alpha-sig.figma.com/img/fa20/bc06/2deb16afff00b283a126f9a481cc148d?Expires=1702252800&Signature=b9iRbTh9yLYbkE68~FSYMaDa1Lh0zzqNV-a8IKciexYYuYXp9AE5XJR93u0JQD1x9ph6AeCYAB65t7vda58fNOWEaYXU5FOH9LxGT-GfbUZKhC-6hUowW2gUnOk5AqUJnFoVB5l3XaKvnZBqhaZ7aY3N2lxcVbXi5pYWzgqIfjP5lFHPgEbhCognYoZue3tiN5vDA3iEyv3MqndDFyFsmMmwEasEzFP~DnpLP1fFULJaY3G7ioA09B~g5vBzaJXVFQH~eN-GKvminC5FKqQtu4cWRoGu7uWdKfPNX4jANk0IZJdu4PW1PFqvkayprGEI0d4j1y8Uzw1OjjeHJh179g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
-  ];
+  // String time = DateFormat('h:mm a').format(DateTime.now());
+  // String day = DateFormat('EEEE').format(DateTime.now());
+  // String date = DateFormat("dd/m/yyyy").format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ServiceProvider>(context, listen: false)
+        .fetchAllHelpRequest(context);
+    final data = storeInstence.fetchAllOrphanages();
+    print("${serviceProviderinstence.helpReqList.length}jvhhhhhhhhhh");
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return DefaultTabController(
@@ -67,47 +70,49 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
             ),
           ),
         ),
-        body: Container(
-          height: hight,
-          width: width,
-          margin: const EdgeInsets.all(20),
-          child: TabBarView(children: [
-            ListView.separated(
-                itemBuilder: (context, index) => notificationFromOrphanage(
-                    orphanageName: "orphanage Name",
-                    hight: hight,
-                    width: width,
-                    ontap: () {},
-                    requestDate: date,
-                    requestTime: time,
-                    day: day,
-                    requestText:
-                        "This orphanage is in an immediate need for clothes. please consider a help.",
-                    userImage: Image.network(
-                      imageSrc[index],
-                      fit: BoxFit.fill,
-                    )),
-                separatorBuilder: (context, index) => Gap(20),
-                itemCount: imageSrc.length),
-            ListView.separated(
-                itemBuilder: (context, index) => notificationFromOrphanage(
-                    orphanageName: "Orpahange name",
-                    width: width,
-                    hight: hight,
-                    ontap: () {},
-                    requestDate: date,
-                    requestTime: time,
-                    day: day,
-                    requestText:
-                        "This orphanage is in an immediate need for clothes. please consider a help.",
-                    userImage: Image.network(
-                      imageSrc[index],
-                      fit: BoxFit.fill,
-                    )),
-                separatorBuilder: (context, index) => const Gap(20),
-                itemCount: imageSrc.length),
-          ]),
-        ),
+        body: Consumer<ServiceProvider>(builder: (context, service, child) {
+          return Container(
+            height: hight,
+            width: width,
+            margin: const EdgeInsets.all(20),
+            child: TabBarView(children: [
+              ListView.separated(
+                  itemBuilder: (context, index) {
+                    // serviceProviderinstence.fectSupportingData(
+                    //     service.helpReqList[index].orphanId, index, );
+
+                    return notificationFromOrphanage(
+                        orphanageName: service.helpReqList[index].name,
+                        hight: hight,
+                        width: width,
+                        ontap: () {},
+                        requestdateAndday:
+                            service.helpReqList[index].dataAndDay,
+                        time: service.helpReqList[index].time,
+                        requestText: service.helpReqList[index].data,
+                        userImage:
+                            NetworkImage(service.helpReqList[index].image) ??
+                                imageNotFound);
+                  },
+                  separatorBuilder: (context, index) => Gap(20),
+                  itemCount: service.helpReqList.length),
+              ListView.separated(
+                  itemBuilder: (context, index) => notificationFromOrphanage(
+                      orphanageName: service.helpReqList[index].name,
+                      width: width,
+                      hight: hight,
+                      ontap: () {},
+                      requestdateAndday: service.helpReqList[index].dataAndDay,
+                      time: service.helpReqList[index].time,
+                      requestText: service.helpReqList[index].data,
+                      userImage:
+                          NetworkImage(service.helpReqList[index].image) ??
+                              imageNotFound),
+                  separatorBuilder: (context, index) => const Gap(20),
+                  itemCount: service.helpReqList.length),
+            ]),
+          );
+        }),
       ),
     );
   }
@@ -117,10 +122,9 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
       required hight,
       required width,
       String? requestText,
-      requestDate,
       required orphanageName,
-      day,
-      requestTime,
+      time,
+      requestdateAndday,
       Function()? ontap}) {
     return InkWell(
       onTap: ontap,
@@ -133,26 +137,27 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Gap(),
-                customeText(text: orphanageName, textcolor: grey600, size: 10),
-                Gap(130),
+                Padding(
+                  padding: const EdgeInsets.only(left: 80),
+                  child: customeText(
+                      text: orphanageName, textcolor: grey600, size: 10),
+                ),
+
                 customeText(
-                    textcolor: grey600,
-                    text: "${requestDate.toString()} ${day.toString()}",
-                    size: 10),
+                    textcolor: grey600, text: "${requestdateAndday}", size: 10),
                 // const Gap(6),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
+                Container(
                   height: 50,
                   width: 50,
-                  child: ClipRRect(
-                    child: userImage,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: userImage),
                     borderRadius: BorderRadius.circular(100),
                   ),
                 ),
@@ -183,8 +188,7 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
                 ),
               ],
             ),
-            customeText(
-                text: requestTime.toString(), textcolor: grey600, size: 10)
+            customeText(text: time.toString(), textcolor: grey600, size: 10)
           ],
         ),
       ),

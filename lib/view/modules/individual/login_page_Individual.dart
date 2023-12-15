@@ -30,12 +30,14 @@ class LoginPageIndividual extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-              const  Gap(50),
+                const Gap(50),
                 customeText(
                     text: "Careconnect", size: 36, fontWeight: FontWeight.w500),
-                Image.network(
-                  "https://s3-alpha-sig.figma.com/img/7ec5/8713/8d552574e82e442581e0092cd66c9003?Expires=1702252800&Signature=nIeVjXt4zIqOCCRuSHpIX9t1RRDZMthhCWCD2HnPcGuu-b2RGCpmEOaebSh1YhSyvcoqm4yAjq9WGnj493vqpF~nHnUH8xAskKt5jTidDT3F7fqr0EoMOKwJrREu~IPpBeEeiqykt0M1Y-rhMXCX4OKcTNuvGzO~fvqx~md3uSLJ8RDf765CWmhhZ-KADGtVA3pt3G21bzZavncEEZfN7havdrIi6CbataKR7xNwtVSbMEh4CG2M~Sogkr6crPPBW2gacx9dwiZceEN75YiM~nTdrr1Ft1Oc8iNRqmFBfsErFKoivAHu76dbh4jFut9mHk38hqEi5~Gf~4-DnMHy3g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                  scale: 20,
+                Container(
+                  height: 300,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/login_page.png"))),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -71,7 +73,7 @@ class LoginPageIndividual extends StatelessWidget {
                     ],
                   ),
                 ),
-              const  Gap(100),
+                const Gap(100),
                 customeGradientButtom(
                     onpressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -83,7 +85,7 @@ class LoginPageIndividual extends StatelessWidget {
                     text: "Login",
                     textcolor: white,
                     bgColor: const MaterialStatePropertyAll(black)),
-              const  Gap(60),
+                const Gap(60),
                 Column(
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,9 +105,9 @@ class LoginPageIndividual extends StatelessWidget {
                         bgColor: white)
                   ],
                 ),
-              const  Gap(20),
+                const Gap(20),
                 customeText(text: "Or login using"),
-              const  Gap(20),
+                const Gap(20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -126,10 +128,10 @@ class LoginPageIndividual extends StatelessWidget {
                         ),
                       ),
                     ),
-                   const Gap(10),
+                    const Gap(10),
                     InkWell(
                       onTap: () {
-                         firebaseAuths.signInWithFacebook(context, 1);
+                        firebaseAuths.signInWithFacebook(context, 1);
                       },
                       child: Container(
                         decoration: BoxDecoration(

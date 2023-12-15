@@ -17,7 +17,9 @@ import 'package:orphanagemanagement/viewmodel/firebase_auth.dart';
 import 'package:orphanagemanagement/viewmodel/firestore.dart';
 
 class NextSignPageOrganization extends StatefulWidget {
-  const NextSignPageOrganization({super.key});
+  TextEditingController email = TextEditingController();
+  String ?uid;
+  NextSignPageOrganization({super.key, required this.email,required this.uid});
 
   @override
   State<NextSignPageOrganization> createState() =>
@@ -30,32 +32,32 @@ class _NextSignPageOrganizationState extends State<NextSignPageOrganization> {
   TextEditingController orgName = TextEditingController();
   TextEditingController about = TextEditingController();
   TextEditingController contactNumber = TextEditingController();
-  TextEditingController email = TextEditingController();
+
   TextEditingController location = TextEditingController();
 
   bool isEmailVerified = false;
   bool isVerified = false;
   Timer? timer;
-  @override
-  void initState() {
-    super.initState();
-    timer =
-        Timer.periodic(const Duration(seconds: 3), (_) => checkEmailVerified());
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   timer =
+  //       Timer.periodic(const Duration(seconds: 3), (_) => checkEmailVerified());
+  // }
 
-  checkEmailVerified() async {
-    await FirebaseAuth.instance.currentUser?.reload();
-    setState(() {
-      isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    });
-    if (isEmailVerified) {
-      Get.to(MainPageOrganization(
-        selectedIndex: 1,
-      ));
-      noti("Successfully Created Account");
-      timer?.cancel();
-    }
-  }
+  // checkEmailVerified() async {
+  //   await FirebaseAuth.instance.currentUser?.reload();
+  //   setState(() {
+  //     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+  //   });
+  //   if (isEmailVerified) {
+  //     Get.to(MainPageOrganization(
+  //       selectedIndex: 1,
+  //     ));
+  //     noti("Successfully Created Account");
+  //     timer?.cancel();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +115,7 @@ class _NextSignPageOrganizationState extends State<NextSignPageOrganization> {
                   ),
                   Gap(50),
                   TextFormField(
-                    controller: email,
+                    controller:widget. email,
                     decoration: InputDecoration(
                       labelText: "Email",
                       suffix: customeText(text: ".com", textcolor: grey600),
@@ -184,9 +186,11 @@ class _NextSignPageOrganizationState extends State<NextSignPageOrganization> {
     int conNumbr = int.parse(contactNumber.text);
 
     fireStore.addOrganizationToFirestore(OrgnRegModel(
-        orgName: orgName.text,
+        image: "",
+      loginId: widget.uid,
+        orhnName: orgName.text,
         contactNumber: conNumbr,
-        email: email.text,
+        email:widget. email.text,
         location: location.text,
         about: about.text));
   }

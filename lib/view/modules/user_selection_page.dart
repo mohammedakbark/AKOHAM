@@ -27,12 +27,11 @@ class UserSelectionPageIndividualAndOrganization extends StatelessWidget {
             customeText(
                 text: "Careconnect", size: 36, fontWeight: FontWeight.w500),
             Gap(30),
-            SizedBox(
+            Container(
               height: 300,
-              child: Image.network(
-                "https://s3-alpha-sig.figma.com/img/fd32/aa9e/9a73b18a8017938fdd66c3e2e3d95c1a?Expires=1702252800&Signature=CyikI4kOEuOioODvgcz~boLi-JzqJjPkwOlvF5mkhD0LbepXFLex6kuk03Vy4CufNbYZJ38MgTshPjIHWttskq3BW6WYe3f-eHtw4ZzjMpyhWbmo67GBtMcc1z1PWYJS4qepGN75tKH6knXLnzsdxi2clKu4bfpZlyrbeol5BpLxT8SvLyMzmyzA7eG7TY4-COVTQC4B4~3eNnlROP1y6UbPzf1H-sTwK1Xn4hvPpib3H0aG0o62JVOtveIRz0xUXIxq3ZXVyqhRC4nDiNOe29goxl71QiS3w-0hxKd1cVATK8HxzdnAsJhhhpZy6lA1eaZmunr~xmRCICrDp-T6-g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                scale: 7,
-              ),
+              decoration:const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/user_or_org.png"))),
             ),
             Gap(20),
             Align(

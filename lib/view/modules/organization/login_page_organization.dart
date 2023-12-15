@@ -36,9 +36,11 @@ class LoginPageOrganization extends StatelessWidget {
                 Gap(50),
                 customeText(
                     text: "Careconnect", size: 36, fontWeight: FontWeight.w500),
-                Image.network(
-                  "https://s3-alpha-sig.figma.com/img/7ec5/8713/8d552574e82e442581e0092cd66c9003?Expires=1702252800&Signature=nIeVjXt4zIqOCCRuSHpIX9t1RRDZMthhCWCD2HnPcGuu-b2RGCpmEOaebSh1YhSyvcoqm4yAjq9WGnj493vqpF~nHnUH8xAskKt5jTidDT3F7fqr0EoMOKwJrREu~IPpBeEeiqykt0M1Y-rhMXCX4OKcTNuvGzO~fvqx~md3uSLJ8RDf765CWmhhZ-KADGtVA3pt3G21bzZavncEEZfN7havdrIi6CbataKR7xNwtVSbMEh4CG2M~Sogkr6crPPBW2gacx9dwiZceEN75YiM~nTdrr1Ft1Oc8iNRqmFBfsErFKoivAHu76dbh4jFut9mHk38hqEi5~Gf~4-DnMHy3g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                  scale: 20,
+                Container(
+                  height: 300,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/login_page.png"))),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -114,7 +116,7 @@ class LoginPageOrganization extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                             firebaseAuths.signWithGoogle(context, 2);
+                        firebaseAuths.signWithGoogle(context, 2);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -132,7 +134,7 @@ class LoginPageOrganization extends StatelessWidget {
                     Gap(10),
                     InkWell(
                       onTap: () {
-                         firebaseAuths.signInWithFacebook(context, 2);
+                        firebaseAuths.signInWithFacebook(context, 2);
                       },
                       child: Container(
                         decoration: BoxDecoration(

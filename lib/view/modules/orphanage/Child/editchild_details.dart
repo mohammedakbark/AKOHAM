@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/blank_textfield.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
+import 'package:orphanagemanagement/view/modules/orphanage/main_page_orphanage.dart';
+import 'package:orphanagemanagement/view/modules/orphanage/tabs/childdetails_tab.dart';
+import 'package:orphanagemanagement/viewmodel/firestore.dart';
+import 'package:orphanagemanagement/viewmodel/store_image.dart';
+import 'package:provider/provider.dart';
 
 class EditChildDetailPageOrphanage extends StatelessWidget {
-  EditChildDetailPageOrphanage({super.key});
+  dynamic childID;
+  EditChildDetailPageOrphanage({super.key, required this.childID});
 
   bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
+    print(childID);
+    final firestore = Provider.of<FireStore>(context);
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     Orientation orientation = MediaQuery.of(context).orientation;
@@ -40,12 +51,22 @@ class EditChildDetailPageOrphanage extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Image.network(
-                        "https://s3-alpha-sig.figma.com/img/24ab/5518/d7c0717b33be2972fd5961a68ce64f6e?Expires=1702252800&Signature=QjStQLGE6H1-jL06bmiCvIkvFBY-8juw~0A6DXUHDa9nuVRduEl8r23QR66krGJZllPEQQ4eKErKkkwL1-WWXZfiI~WxpPj-9eoNPZ-OV~CV1xLgJP1p8Ot6DfgtqVyiQoTYudkaQcPi0z1ctcCsbL~evX7i1MANITbXZhdhYXVSYtSNCMxH7BUS-vWlVzAuabbLF9khL7qeDvHAr9bMTFi3d0vceL2nVsmI2m5MNGQ1lvk59an4~1vBwjzjAjeekrjiGwLvllsCGZbMDQeIf9wE7aE4QaR1BcmD4IEzDyxMZiKL0BFeBhL8YcK-L2n1zChGZ7NJBxu6olSZPR9jow__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                        scale: 1.5,
+                      Container(
+                        // height: 70,
+                        // width: 70,
+                        decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.circular(50),
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                      "${firestore.childDataRegModel!.image}",
+                                    ) ??
+                                    imageNotFound)),
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: () async {
+                          await selectImage(context).then((value) => firestore
+                              .uploadChilimageToFirestore(childID, imageFile!));
+                        },
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
@@ -207,7 +228,9 @@ class EditChildDetailPageOrphanage extends StatelessWidget {
                 height:
                     orientation == landScapeMode ? hight * .08 : hight * .05,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => ChildDetailsTabOrphanage());
+                  },
                   style: ButtonStyle(
                     backgroundColor: const MaterialStatePropertyAll(black),
                     shape: MaterialStatePropertyAll(RoundedRectangleBorder(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget BlankTextField({context, controller, hintText,double? fielSize, maxline}) {
+Widget BlankTextField({context,TextEditingController? controller, hintText,double? fielSize, maxline}) {
   return SizedBox(
     width:fielSize?? MediaQuery.of(context).size.width * .4,
     child: TextFormField(

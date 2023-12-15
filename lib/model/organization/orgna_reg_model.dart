@@ -1,35 +1,43 @@
 class OrgnRegModel {
-  
-  String? orgName;
-  int? contactNumber;
-  String? email;
-  String? location;
-  String? about;
+  String ?loginId;
+  String orhnName;
+  int contactNumber;
+  String email;
+  String location;
+  String about;
 
-  // int? loginId;
+  dynamic orphnId;
 
-  // Image? image;
+  String ?image;
 
-  OrgnRegModel({
- 
-    required this.orgName,
-    required this.contactNumber,
-    required this.email,
-    // required this.image,
-    required this.location,
-    required this.about
+  OrgnRegModel(
+      {this.orphnId,
+      this.loginId,
+      required this.orhnName,
+      required this.contactNumber,
+      required this.email,
+       this.image,
+      required this.location,
+      required this.about});
 
-  });
-
-  Map<String, dynamic> toJson() => {
-        "orphnName": orgName,
+  Map<String, dynamic> toJson(id) => {
+    "image":image,
+    "loginId":loginId,
+        "orphnId": id,
+        "orphnName": orhnName,
         "contactNumber": contactNumber,
         "email": email,
         "location": location,
-        "about":about
+        "about": about
       };
+  factory OrgnRegModel.fromJson(Map<String, dynamic> json) => OrgnRegModel(
+    image: json["image"],
+    loginId: json["loginId"],
+        orphnId: json["orphnId"],
+        orhnName: json["orphnName"],
+        contactNumber: json["contactNumber"],
+        email: json["email"],
+        location: json["location"],
+        about: json["about"],
+      );
 }
-// factory Modell.fromJson(Map<String, dynamic> json) =>
-//       Modell(first: json["first"], second: json["second"]);
-
-//   Map<String, dynamic> toJson() => {"first": first, "second": second};

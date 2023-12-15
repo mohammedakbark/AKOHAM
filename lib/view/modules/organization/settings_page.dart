@@ -3,6 +3,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/organization/main_page_organization.dart';
 import 'package:orphanagemanagement/viewmodel/firebase_auth.dart';
@@ -18,15 +19,7 @@ class _SettingsPageOrganizationState extends State<SettingsPageOrganization> {
    FirebaseAuths firebaseAuths = FirebaseAuths();
   bool onToggle = false;
 
-  Image penImage = Image.asset(
-    "assets/Bell.png",
-    // scale: 3,
-  );
-
-  Image logoutImage = Image.network(
-    "https://s3-alpha-sig.figma.com/img/ecf6/f1fc/79b9550be9b26ffb46c501540141a5b7?Expires=1702252800&Signature=f6I8LtBE7padRIxUcmv2R2CFxm5kG~xxyA4iLHuDP6U5sVC9nx3fFpcOgXl-~XNstaQivIAl62RzNmXucZQOSCnrOQBWMM8Yq0C7mytF0QIsYYTCqe0Mr9p9ylTXDmmaLJr1J38LiK2uNTYw8miXObWlPQ-1D8qtdh1cxkK3~G~KUWKbj5glX37zGzXMq0tEggRmi04j6Lq1SAnCy6zIZNNhWsXepMQFrdjQ9Ti5jwOFIhAWpXNbY14n7aWi8O4q8~pYVo68o0xM95wBd8Qd0~S~BSYItvwdnLNNQWGy~rDPxlslxp0zgf8wX1yHzacxBJtybTL81cmUOxreOS8N4w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-    scale: 3,
-  );
+ 
 
   @override
   Widget build(BuildContext context) {

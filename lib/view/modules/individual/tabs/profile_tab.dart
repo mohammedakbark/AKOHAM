@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:orphanagemanagement/model/individual/indivi_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/individual/edit_profile_details.dart';
@@ -10,7 +12,8 @@ import 'package:orphanagemanagement/view/modules/individual/settings_page.dart';
 import 'package:orphanagemanagement/view/modules/individual/signup_page.dart';
 
 class ProfileTabIndividual extends StatelessWidget {
-  const ProfileTabIndividual({super.key});
+  IndivRegModel indivRegModel;
+  ProfileTabIndividual({super.key, required this.indivRegModel});
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +54,24 @@ class ProfileTabIndividual extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  customeText(text: "User123", size: 24),
+                  customeText(text: "${indivRegModel.name}", size: 24),
                   Stack(
                     alignment: Alignment.topCenter,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
-                          "https://s3-alpha-sig.figma.com/img/5e3c/9e81/dd1b5781039c3179b5aad0001c25a54b?Expires=1702252800&Signature=hZ5KJu0eZ4pNig074kx4O9D2K7AHs1r1jWnsauWxxAPJNse5TBhhsEL9~Lce5CP0zyd-1vTQ1oR0ELbGZGn9HYKP1oz9uvzMFOog6Tyb8UTgZ0ya2BI1mJb87D-TpaURrMVOTKTcnI7yFetaZ30lri-YPpKuR6pNARXKzfTf-WNVwtRHVcO-pLUnoDsE1J306DTaO3xQK15Axw2TwOFcxLv7D75tnqzBarluaXj-40VS6uUxreU-8WrP~Isi8qOl34NZ0uhU1Nj6jmfyVghOoPPb0~cLgm8X~38Zl0yu~D6epR6~~ki~tJ9028PqtYotyEHpGMZ5C96FnMN-b7KeDA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                          scale: 40,
-                        ),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: storeInstence.indivRegModel!.image == ""
+                                    ? imageNotFound
+                                    : NetworkImage(
+                                        storeInstence.indivRegModel!.image))),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 60),
+                        padding: const EdgeInsets.only(top: 90),
                         child: SizedBox(
                           height: 30,
                           child: ElevatedButton(
@@ -111,10 +119,12 @@ class ProfileTabIndividual extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            customeText(text: "name", size: 20),
-                            customeText(text: "1234567899", size: 20),
-                            customeText(text: "user@gmail.com", size: 20),
-                            customeText(text: "sapmle loc", size: 20),
+                            customeText(text: indivRegModel.name, size: 20),
+                            customeText(
+                                text: "${indivRegModel.contactNumber}",
+                                size: 20),
+                            customeText(text: indivRegModel.email, size: 20),
+                            customeText(text: indivRegModel.location, size: 20),
                           ],
                         )
                       ],
@@ -124,7 +134,12 @@ class ProfileTabIndividual extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           elevation: 0, backgroundColor: appThemeGrey),
                       onPressed: () {
-                        Get.to(EditProfileDetailIndividual());
+                        Get.to(EditProfileDetailIndividual(
+                          contactNumber: "${indivRegModel.contactNumber}",
+                          email: indivRegModel.email,
+                          indiName: indivRegModel.name,
+                          location: indivRegModel.location,
+                        ));
                       },
                       child:
                           customeText(text: "Edit Profile", textcolor: black))

@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:orphanagemanagement/model/orphanage/bank_detail_model.dart';
 import 'package:orphanagemanagement/model/orphanage/orphn_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/view/custome_widgets/blank_textfield.dart';
@@ -17,10 +16,12 @@ import 'package:orphanagemanagement/viewmodel/firebase_auth.dart';
 import 'package:orphanagemanagement/viewmodel/firestore.dart';
 
 class NextSignPageOrphanage extends StatefulWidget {
-  // String email;
-  // String password;
+  String uid;
+   TextEditingController email = TextEditingController();
   NextSignPageOrphanage({
     super.key,
+    required this.email,
+    required this.uid
   });
 
   @override
@@ -34,7 +35,7 @@ class _NextSignPageOrphanageState extends State<NextSignPageOrphanage> {
   TextEditingController about = TextEditingController();
   TextEditingController numberOfChild = TextEditingController();
   TextEditingController contactNumber = TextEditingController();
-  TextEditingController email = TextEditingController();
+ 
   TextEditingController location = TextEditingController();
   TextEditingController bank = TextEditingController();
   TextEditingController accountNumber = TextEditingController();
@@ -45,24 +46,24 @@ class _NextSignPageOrphanageState extends State<NextSignPageOrphanage> {
   bool isEmailVerified = false;
   bool isVerified = false;
   Timer? timer;
-  @override
-  void initState() {
-    super.initState();
-    timer =
-        Timer.periodic(const Duration(seconds: 3), (_) => checkEmailVerified());
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   timer =
+  //       Timer.periodic(const Duration(seconds: 3), (_) => checkEmailVerified());
+  // }
 
-  checkEmailVerified() async {
-    await FirebaseAuth.instance.currentUser?.reload();
-    setState(() {
-      isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    });
-    if (isEmailVerified) {
-      Get.to(MainPageOrphanage());
-      noti("Successfully Created Account");
-      timer?.cancel();
-    }
-  }
+  // checkEmailVerified() async {
+  //   await FirebaseAuth.instance.currentUser?.reload();
+  //   setState(() {
+  //     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+  //   });
+  //   if (isEmailVerified) {
+  //     Get.to(MainPageOrphanage());
+  //     noti("Successfully Created Account");
+  //     timer?.cancel();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +173,7 @@ class _NextSignPageOrphanageState extends State<NextSignPageOrphanage> {
                               BlankTextField(
                                   context: context, controller: contactNumber),
                               BlankTextField(
-                                  context: context, controller: email),
+                                  context: context, controller:widget. email),
                               BlankTextField(
                                   context: context, controller: location)
                             ],
@@ -263,9 +264,11 @@ class _NextSignPageOrphanageState extends State<NextSignPageOrphanage> {
                 width: width * .45,
                 height: hight * .05,
                 child: ElevatedButton(
-                    onPressed: () {
-                      firebaseAuths.emailVarification(context);
-                      addorphn();
+                    onPressed: () async{
+                   await   addorphn();
+                      // firebaseAuths.emailVarification(context);
+                      // Get.to(() => MainPageOrphanage());
+
                       setState(() {
                         isVerified = true;
                       });
@@ -287,20 +290,23 @@ class _NextSignPageOrphanageState extends State<NextSignPageOrphanage> {
     );
   }
 
-  addorphn() {
+  addorphn()async {
     int child = int.parse(numberOfChild.text);
     int contactnumberr = int.parse(contactNumber.text);
     int bnkContcNumbr = int.parse(bankContactNumber.text);
-    fireStore.addOrphnToFirestore(
+  await  fireStore.addOrphnToFirestore(
         OrphnRegModel(
+            image: "",
+          loginId: widget.uid,
           orphnName: orphnName.text,
           about: about.text,
           childCount: child,
           contactNumber: contactnumberr,
-          email: email.text,
+          email:widget. email.text,
           location: location.text,
         ),
         BankDetailModel(
+          accountNumber: accountNumber.text,
             bank: bank.text,
             contactNumber: bnkContcNumbr,
             epaymentnumber: epaymetNumber.text));

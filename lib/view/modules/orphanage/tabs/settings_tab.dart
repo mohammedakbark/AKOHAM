@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:orphanagemanagement/model/orphanage/orphn_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/Child/delete_single_child_detail_page.dart';
@@ -8,16 +9,12 @@ import 'package:orphanagemanagement/view/modules/orphanage/userprofile/editprofi
 import 'package:orphanagemanagement/viewmodel/firebase_auth.dart';
 
 class SettingsTabOrphanage extends StatelessWidget {
-  SettingsTabOrphanage({super.key});
+   OrphnRegModel ?orphnRegModel;
+  BankDetailModel? bankDetailModel;
+  SettingsTabOrphanage({super.key,required this.bankDetailModel,required this.orphnRegModel});
   FirebaseAuths firebaseAuths = FirebaseAuths();
-  Image penImage = Image.network(
-    'https://s3-alpha-sig.figma.com/img/15ad/3116/0314fdc8dec88d736d02964f2019687e?Expires=1702252800&Signature=DXilRh0IbOkml2DAVFM6oFbVCjJcKg96FqLVP3PuylVnjPsKpUoREMWr-8AoNdbnAjUAF4wEM4HA210kaC5wAQPrQ84M~oUnVW09lTzDNmKXEbvDU5GBCzKfqeX6r~ZARwmz7niMYhgnMIZi4B6VhWj99eLFF~qNDzU4aSqZ~5ZjhCWG~1CI6Oyq6-EcUzHvcse4nw93B6blMKMAK9S3JTo9zzRhInZl7YbbhD8fLRa12BUHqgJj~HzjDx6boX8Yd5yQS6AzUVMX-K5oIGrTiTbFrjhD1bP2IHHWATdSAe4gIsoGxkwRJVTDQbCMLqU73tEUn-vJz1ZzK6tYttrpQg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-    scale: 3,
-  );
-  Image logoutImage = Image.network(
-    "https://s3-alpha-sig.figma.com/img/ecf6/f1fc/79b9550be9b26ffb46c501540141a5b7?Expires=1702252800&Signature=f6I8LtBE7padRIxUcmv2R2CFxm5kG~xxyA4iLHuDP6U5sVC9nx3fFpcOgXl-~XNstaQivIAl62RzNmXucZQOSCnrOQBWMM8Yq0C7mytF0QIsYYTCqe0Mr9p9ylTXDmmaLJr1J38LiK2uNTYw8miXObWlPQ-1D8qtdh1cxkK3~G~KUWKbj5glX37zGzXMq0tEggRmi04j6Lq1SAnCy6zIZNNhWsXepMQFrdjQ9Ti5jwOFIhAWpXNbY14n7aWi8O4q8~pYVo68o0xM95wBd8Qd0~S~BSYItvwdnLNNQWGy~rDPxlslxp0zgf8wX1yHzacxBJtybTL81cmUOxreOS8N4w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-    scale: 3,
-  );
+  Image penImage = Image.asset("assets/edit_.png");
+  Image logoutImage = Image.asset("assets/log_out.png");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +36,7 @@ class SettingsTabOrphanage extends StatelessWidget {
             const Gap(20),
             easyButton(
                 onpressed: () {
-                  Get.to(EditProfileOrphanage());
+                  Get.to(EditProfileOrphanage(bankDetailModel:bankDetailModel!,orphnRegModel: orphnRegModel!,));
                 },
                 bgColor: MaterialStatePropertyAll(appThemeGrey),
                 image: penImage,
@@ -48,16 +45,16 @@ class SettingsTabOrphanage extends StatelessWidget {
                 context: context,
                 fontWeight: FontWeight.w400),
             const Gap(30),
-            easyButton(
-                onpressed: () {
-                  Get.to(EditOrDeleteSingleChildDataPageOrphanage());
-                },
-                bgColor: MaterialStatePropertyAll(appThemeGrey),
-                image: penImage,
-                text: "Edit Child Data",
-                textcolor: grey600,
-                context: context,
-                fontWeight: FontWeight.w400),
+            // easyButton(
+            //     onpressed: () {
+            //       Get.to(EditOrDeleteSingleChildDataPageOrphanage());
+            //     },
+            //     bgColor: MaterialStatePropertyAll(appThemeGrey),
+            //     image: penImage,
+            //     text: "Edit Child Data",
+            //     textcolor: grey600,
+            //     context: context,
+            //     fontWeight: FontWeight.w400),
             const Expanded(child: SizedBox()),
             easyButton(
                 onpressed: () {

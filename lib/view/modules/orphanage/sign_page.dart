@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:orphanagemanagement/model/other_models/login_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custom_button.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_textfield.dart';
@@ -136,15 +138,25 @@ class SignPageOrphanage extends StatelessWidget {
                   height:
                       orientation == landScapeMode ? hight * .08 : hight * .05,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        firebaseAuths.sign(
+                        await firebaseAuths.sign(
                           emailController.text,
                           passwordController.text,
                           context,
                         );
 
-                        Get.to(NextSignPageOrphanage());
+                        await storeInstence.addUsertoLoginTable(
+                            firebaseAuths.uid,
+                            LoginTable(
+                                email: emailController.text,
+                                loginId: firebaseAuths.uid!,
+                                type: "Orphanage"));
+
+                        Get.to(NextSignPageOrphanage(
+                          email: emailController,
+                          uid: firebaseAuths.uid!,
+                        ));
                       }
                     },
                     style: ButtonStyle(

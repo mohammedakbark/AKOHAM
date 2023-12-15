@@ -1,9 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:orphanagemanagement/model/other_models/help_request_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/custome_widgets/easyButton.dart';
+import 'package:orphanagemanagement/view/modules/orphanage/main_page_orphanage.dart';
 
 class SendRequestToUserOrphanage extends StatelessWidget {
   int? passedIndex;
@@ -20,6 +24,10 @@ class SendRequestToUserOrphanage extends StatelessWidget {
 //cloaths
     "This orphanage is in an immediate need for Clothes.\n \nplease consider a help.",
   ];
+  List<String> requestType = ["FUND", "FOOD", "EDUCATION", "CLOATHS"];
+  String time = DateFormat('h:mm a').format(DateTime.now());
+  String day = DateFormat('EEEE').format(DateTime.now());
+  String date = DateFormat("dd/m/yyyy").format(DateTime.now());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,6 +78,19 @@ class SendRequestToUserOrphanage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * .5,
                 height: 60,
                 child: easyButton(
+                    onpressed: () {
+                      serviceProviderinstence.sendNewNotificationToUsers(
+                          HelpRequestModel(
+                            dataAndDay: "$date $day",
+                            time: time,
+                            image: storeInstence.orphnRegModel!.image!,
+name: storeInstence.orphnRegModel!.orphnName,
+                              data: content[passedIndex!],
+                              orphanId: currentUserId,
+                              reqStatus: "Requested",
+                              reqType: requestType[passedIndex!]),context);
+                      Get.back();
+                    },
                     context: context,
                     bgColor: const MaterialStatePropertyAll(black),
                     text: "Send",

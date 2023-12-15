@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:orphanagemanagement/model/organization/orgna_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
@@ -11,7 +12,8 @@ import 'package:orphanagemanagement/view/modules/organization/edit_profile_detai
 import 'package:orphanagemanagement/view/modules/organization/settings_page.dart';
 
 class ProfileTabOrganization extends StatefulWidget {
-  ProfileTabOrganization({super.key});
+  OrgnRegModel? orgnRegModel;
+  ProfileTabOrganization({super.key,required this.orgnRegModel});
 
   @override
   State<ProfileTabOrganization> createState() => _ProfileTabOrganizationState();
@@ -38,14 +40,14 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
         ],
       ),
       body: Container(
-          margin: EdgeInsets.all(20),
+          margin:const EdgeInsets.all(20),
           height: double.infinity,
           width: double.infinity,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  padding:const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   height: hight * .6,
                   width: width,
                   decoration: BoxDecoration(
@@ -71,11 +73,11 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                               borderRadius: BorderRadius.circular(49)),
                           child: Center(
                             child: customeText(
-                                text: "Organizatio", textcolor: blue, size: 17),
+                                text: "Organization", textcolor: blue, size: 17),
                           ),
                         ),
                       ),
-                      customeText(text: "Organization Name", size: 24),
+                      customeText(text:widget.orgnRegModel!.orhnName, size: 24),
                       Stack(
                         alignment: Alignment.topCenter,
                         children: [
@@ -100,9 +102,9 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                                       shape: CircleBorder(),
                                       backgroundColor: appThemeGrey),
                                   onPressed: () {
-                                    Get.to(EditProfileImageOrganization());
+                                    Get.to(const EditProfileImageOrganization());
                                   },
-                                  child: Icon(
+                                  child:const Icon(
                                     Icons.edit,
                                     color: black,
                                     size: 15,
@@ -140,10 +142,10 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                customeText(text: "name", size: 20),
-                                customeText(text: "1234567899", size: 20),
-                                customeText(text: "user@gmail.com", size: 20),
-                                customeText(text: "sapmle loc", size: 20),
+                                customeText(text: widget.orgnRegModel!.orhnName, size: 20),
+                                customeText(text:"${widget.orgnRegModel!.contactNumber}", size: 20),
+                                customeText(text: widget.orgnRegModel!.email, size: 20),
+                                customeText(text: widget.orgnRegModel!.location, size: 20),
                               ],
                             )
                           ],
@@ -153,19 +155,19 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                           style: ElevatedButton.styleFrom(
                               elevation: 0, backgroundColor: appThemeGrey),
                           onPressed: () {
-                            Get.to(EditProfileDetailOrganization());
+                            Get.to(const EditProfileDetailOrganization());
                           },
                           child: customeText(
                               text: "Edit Profile", textcolor: black))
                     ],
                   ),
                 ),
-                Gap(20),
+               const Gap(20),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: customeText(text: "About Us", size: 25)),
                 Container(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  padding:const EdgeInsets.only(left: 10, right: 10, top: 10),
                   width: width,
                   height: isExpanded ? hight * .25 : hight * .1,
                   decoration: BoxDecoration(
@@ -176,11 +178,8 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        "Details of orphanage like establishment date \n"
-                        " history contributions etc and more details for users.Details of "
-                        "orphanage like establishment date , history contributions etc and"
-                        " more details for users.Details of orphanage like establishment date "
-                        ", history contributions etc and more details for users",
+                        // 
+                        widget.orgnRegModel!.about,
                         style: GoogleFonts.jua(fontSize: 13),
                         overflow: isExpanded
                             ? TextOverflow.clip

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,16 +8,20 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/modules/individual/main_page_individual.dart';
 import 'package:orphanagemanagement/view/modules/individual/tabs/home_tab.dart';
 import 'package:orphanagemanagement/view/modules/organization/main_page_organization.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/main_page_orphanage.dart';
 import 'package:orphanagemanagement/view/modules/user_selection_page.dart';
+import 'package:orphanagemanagement/viewmodel/login_preference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseAuths {
   FirebaseAuth auth = FirebaseAuth.instance;
   // User? user;
-  UserCredential? userCredential;
+
+  String? uid;
 
   sign(
     email,
@@ -23,10 +29,14 @@ class FirebaseAuths {
     BuildContext context,
   ) async {
     try {
-      await auth.createUserWithEmailAndPassword(
+   UserCredential   userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      uid = userCredential.user!.uid;
+      print(
+          "${uid.toString()}////////////////////////////////////////////////////////////////////");
+      setLoginPrefertrue();
     } catch (e) {
-      _showDiolog("$e", context);
+      customeShowDiolog("$e", context);
     }
   }
 
@@ -37,36 +47,37 @@ class FirebaseAuths {
       if (FirebaseAuth.instance.currentUser != null &&
           !FirebaseAuth.instance.currentUser!.emailVerified) {
         await FirebaseAuth.instance.currentUser!.sendEmailVerification().then(
-            (value) => _showDiolog(
+            (value) => customeShowDiolog(
                 "Varification email Send to your registered email address ${FirebaseAuth.instance.currentUser!.email} ",
                 context));
       }
     } catch (e) {
       // print('Error sending verification email: $e');
-      _showDiolog("$e", context);
+      customeShowDiolog("$e", context);
     }
   }
 
   login(email, password, context, page) async {
     try {
-      await auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) => noti("Login Successful"))
-          .then((value) {
-        if (page == 0) {
-          Get.to(() => MainPageOrphanage());
-        } else if (page == 1) {
-          Get.to(() => MainPageIndividual(
-                selectedIndex: 1,
-              ));
-        } else {
-          Get.to(() => MainPageOrganization(
-                selectedIndex: 1,
-              ));
-        }
-      });
+      UserCredential loginId = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      
+      if (page == 0) {
+        storeInstence.fetchCurrentOrphanage(loginId.user!.uid);
+        noti("Login Successful");
+       
+      } else if (page == 1) {
+         storeInstence.fetchCurrentIndividual(loginId.user!.uid);
+        noti("Login Successful");
+      } else {
+         storeInstence.fetchCurrentOrganization(loginId.user!.uid);
+          noti("Login Successful");
+     //     ));
+      }
+      // });
+      setLoginPrefertrue();
     } catch (e) {
-      _showDiolog("$e", context);
+      customeShowDiolog("$e", context);
     }
   }
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +105,7 @@ class FirebaseAuths {
         }
       });
     } catch (e) {
-      return _showDiolog("$e", context);
+      return customeShowDiolog("$e", context);
     }
   }
 
@@ -122,7 +133,7 @@ class FirebaseAuths {
         }
       });
     } catch (e) {
-      return _showDiolog("$e", context);
+      return customeShowDiolog("$e", context);
     }
   }
 
@@ -132,13 +143,15 @@ class FirebaseAuths {
 
   void signOut(
     context,
-  ) {
+  ) async {
+    setLoginPreferfalse();
     signOutFromMAil(context);
     signoutFromGoogle(
       context,
     );
     Get.offAll(const UserSelectionPageIndividualAndOrganization());
   }
+
 /////////////////////////////////////////////
   void signOutFromMAil(context) {
     FirebaseAuth.instance.signOut();
@@ -148,7 +161,9 @@ class FirebaseAuths {
     GoogleSignIn().signOut();
   }
 
-  _showDiolog(String title, BuildContext context) {
+ 
+}
+ customeShowDiolog(String title, BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -164,8 +179,6 @@ class FirebaseAuths {
       ),
     );
   }
-}
-
 void noti(msg) {
   Fluttertoast.showToast(
     msg: msg,

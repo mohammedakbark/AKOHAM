@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:orphanagemanagement/model/orphanage/orphn_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/blank_textfield.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/userprofile/editprofile/edit_profile_page.dart';
+import 'package:orphanagemanagement/viewmodel/firestore.dart';
 
 class ProfileTabOrphanage extends StatefulWidget {
-  const ProfileTabOrphanage({super.key});
+  OrphnRegModel orphnRegModel;
+  BankDetailModel bankDetailModel;
+  ProfileTabOrphanage(
+      {super.key, required this.bankDetailModel, required this.orphnRegModel});
 
   @override
   State<ProfileTabOrphanage> createState() => _ProfileTabOrphanageState();
@@ -17,6 +23,7 @@ class ProfileTabOrphanage extends StatefulWidget {
 
 class _ProfileTabOrphanageState extends State<ProfileTabOrphanage> {
   bool isExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     Orientation orientation = MediaQuery.of(context).orientation;
@@ -35,17 +42,14 @@ class _ProfileTabOrphanageState extends State<ProfileTabOrphanage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              customeText(text: "Orphanage name", size: 22),
+            customeText(text: "${widget.orphnRegModel.orphnName}", size: 22),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: SizedBox(
                   width: width * .9,
                   height:
                       orientation == landScapeMode ? hight * .4 : hight * .25,
-                  child: Image.network(
-                    "https://s3-alpha-sig.figma.com/img/3d8d/1bfc/59ea5d5029e84319bd6ad7c1d9bbbd9c?Expires=1702252800&Signature=OomWDlytLpsRfSj1WfJqZMDLGAT6QRwvrC8afKL4VF95yZkQGXWvZfBcZbcSwUL3Cu-7JsloyiqnfxG-tW4XuTRcygVrdAET-AKD~oQZzrZjDLh~CrTrND7bnfYgRBFxa2PPh65Z2RzBdfX9KFJNLF0CSNA0Hco7JseGbX2EcxqgMPE~t00yJh3EYSy-GvwZ-HiUgWs6M6bIICTc1~ERHQN-S7ROrfwzrkX-zzl6t~MHjorvXZSYahxLYhLvg96viebdQnj24fMGvtvu4ueHOq80qh6cwgkQpCplnBedifhXZF2p~OoK9kF6MyA9zfPv3v-0sjzem8ErnQgFw5tjYQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4",
-                    fit: BoxFit.fill,
-                  ),
+                  child:widget.orphnRegModel.image==null? addImage:Image.network(widget.orphnRegModel.image!),
                 ),
               ),
               Gap(30),
@@ -57,7 +61,7 @@ class _ProfileTabOrphanageState extends State<ProfileTabOrphanage> {
                       orientation == landScapeMode ? hight * .07 : hight * .04,
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(EditProfileOrphanage());
+                      Get.to(()=>EditProfileOrphanage(bankDetailModel:widget.bankDetailModel!,orphnRegModel: widget.orphnRegModel!,));
                     },
                     style: ButtonStyle(
                       backgroundColor: const MaterialStatePropertyAll(white),
@@ -88,11 +92,12 @@ class _ProfileTabOrphanageState extends State<ProfileTabOrphanage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "Details of orphanage like establishment date \n"
-                      " history contributions etc and more details for users.Details of "
-                      "orphanage like establishment date , history contributions etc and"
-                      " more details for users.Details of orphanage like establishment date "
-                      ", history contributions etc and more details for users",
+                      // "Details of orphanage like establishment date \n"
+                      // " history contributions etc and more details for users.Details of "
+                      // "orphanage like establishment date , history contributions etc and"
+                      // " more details for users.Details of orphanage like establishment date "
+                      // ", history contributions etc and more details for users",
+                      "${widget.orphnRegModel.about}",
                       style: GoogleFonts.jua(fontSize: 13),
                       overflow: isExpanded
                           ? TextOverflow.clip
@@ -148,12 +153,10 @@ class _ProfileTabOrphanageState extends State<ProfileTabOrphanage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              BlankTextField(
-                                context: context,
-                              ),
-                              BlankTextField(context: context),
-                              BlankTextField(context: context),
-                              BlankTextField(context: context)
+                              customeText(text: "${widget.orphnRegModel?.childCount}", size: 16),
+                              customeText(text: "${widget.orphnRegModel?.contactNumber}", size: 16),
+                              customeText(text:"${widget.orphnRegModel?.email}", size: 16),
+                              customeText(text: "${widget.orphnRegModel?.location}", size: 16),
                             ],
                           )
                         ],
@@ -204,12 +207,10 @@ class _ProfileTabOrphanageState extends State<ProfileTabOrphanage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              BlankTextField(
-                                context: context,
-                              ),
-                              BlankTextField(context: context),
-                              BlankTextField(context: context),
-                              BlankTextField(context: context)
+                             customeText(text: "${widget.bankDetailModel?.bank}", size: 16),
+                              customeText(text: "${widget.bankDetailModel?.accountNumber}", size: 16),
+                              customeText(text: "${widget.bankDetailModel?.epaymentnumber}", size: 16),
+                              customeText(text:"${widget.bankDetailModel?.contactNumber}", size: 16),
                             ],
                           )
                         ],
