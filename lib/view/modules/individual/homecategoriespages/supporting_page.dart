@@ -31,7 +31,7 @@ class _SupportingPageInHomeIndividualState
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
         body: Consumer<FireStore>(builder: (context, firestore, child) {
-          final data = firestore.supportingList;
+          final supportingdData = firestore.supportingList;
           // print("${firestore.supportingList?.length}lllllllllllllll");
           return Container(
             height: hight,
@@ -64,25 +64,25 @@ class _SupportingPageInHomeIndividualState
                 customeText(text: "Supporting", size: 22),
                 const Gap(15),
                 Expanded(
-                    child: data == null
+                    child: supportingdData == null
                         ? Center(
                             child: CircularProgressIndicator(),
                           )
                         : ListView.separated(
                             itemBuilder: (context, index) => exploreOrphanages(
-                                location: data[index].location,
+                                location: supportingdData[index].location,
                                 onTap: () {
                                   Get.to(
-                                      SupportSingleOrphanagePafeIndividual(orphnId: data[index].orphanageId,));
+                                      SupportSingleOrphanagePafeIndividual(orphnId: supportingdData[index].orphanageId,));
                                 },
                                 hight: hight,
                                 width: width,
-                                orphnName: data[index].name,
-                                numOfChile: data[index].numberOfChild,
-                                contNumber: data[index].contactNumber,
-                                srcimg: data[index].image),
+                                orphnName: supportingdData[index].name,
+                                numOfChile: supportingdData[index].numberOfChild,
+                                contNumber: supportingdData[index].contactNumber,
+                                srcimg: supportingdData[index].image),
                             separatorBuilder: (context, index) => Gap(20),
-                            itemCount: data.length))
+                            itemCount: supportingdData.length))
               ],
             ),
           );

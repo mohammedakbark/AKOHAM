@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:orphanagemanagement/model/other_models/adoption_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/utils/images.dart';
@@ -24,7 +25,9 @@ class SingleChildDataIndividual extends StatefulWidget {
 
 class _SingleChildDataIndividualState extends State<SingleChildDataIndividual> {
   bool isExpanded = false;
-
+String time = DateFormat('h:mm a').format(DateTime.now());
+  String day = DateFormat('EEEE').format(DateTime.now());
+  String date = DateFormat("dd/m/yyyy").format(DateTime.now());
   @override
   Widget build(BuildContext context) {
     Provider.of<FireStore>(context, listen: false)
@@ -224,6 +227,10 @@ class _SingleChildDataIndividualState extends State<SingleChildDataIndividual> {
                       onpressed: () {
                         serviceProviderinstence.addAdoptionRequestToFirebase(
                             AdoptionModel(
+                              userType: "Individual",
+                              image:storeInstence.indivRegModel!.image, 
+                              dataAndDay: "$date $day",
+                              time: time,
                                 childId: widget.selectedChildId,
                                 reqStatus: "REQUESTED",
                                 senderId: currentUserId),context);

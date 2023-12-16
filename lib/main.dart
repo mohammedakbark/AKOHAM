@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:orphanagemanagement/firebase_options.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/modules/individual/main_page_individual.dart';
 import 'package:orphanagemanagement/view/modules/organization/main_page_organization.dart';
+import 'package:orphanagemanagement/view/modules/organization/settings_page.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/login_page.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/main_page_orphanage.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/tabs/settings_tab.dart';
@@ -17,10 +19,11 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<FireStore>(create: (_) => FireStore()),
-      ChangeNotifierProvider<ServiceProvider>(create: (_) => ServiceProvider())
+    ChangeNotifierProvider<ServiceProvider>(create: (_) => ServiceProvider())
   ], child: const MyApp()));
 }
 
@@ -54,8 +57,8 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: SplashScreen() 
-        // home: SettingsTabOrphanage()
+        home: SplashScreen()
+        // home: SettingsPageOrganization()
 
         // ),
 

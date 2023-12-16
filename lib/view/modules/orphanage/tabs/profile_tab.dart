@@ -61,7 +61,7 @@ class _ProfileTabOrphanageState extends State<ProfileTabOrphanage> {
                       orientation == landScapeMode ? hight * .07 : hight * .04,
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(()=>EditProfileOrphanage(bankDetailModel:widget.bankDetailModel!,orphnRegModel: widget.orphnRegModel!,));
+                      Get.to(()=>EditProfileOrphanage(bankDetailModel:widget.bankDetailModel,orphnRegModel: widget.orphnRegModel,));
                     },
                     style: ButtonStyle(
                       backgroundColor: const MaterialStatePropertyAll(white),

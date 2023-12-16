@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:orphanagemanagement/model/orphanage/orphn_reg_model.dart';
 import 'package:orphanagemanagement/model/other_models/adoption_model.dart';
+import 'package:orphanagemanagement/model/other_models/donation_accepted_model.dart';
 import 'package:orphanagemanagement/model/other_models/help_request_model.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/viewmodel/firebase_auth.dart';
@@ -12,6 +13,10 @@ import 'package:orphanagemanagement/viewmodel/firestore.dart';
 class ServiceProvider with ChangeNotifier {
   List<HelpRequestModel> helpReqList = [];
   HelpRequestModel? helpRequestModel;
+  List<AdoptionModel> adoptionReqList = [];
+  AdoptionModel? adoptionModel;
+  List<DonationAcceptedmodel> donationAcceptenceList = [];
+  DonationAcceptedmodel? donationAcceptedmodel;
   ////////////////////////////request/////////////////
   sendNewNotificationToUsers(HelpRequestModel helpRequestModel, context) {
     try {
@@ -53,36 +58,53 @@ class ServiceProvider with ChangeNotifier {
     }
   }
 
+  fetchAllAdoptionRequests(context) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> adoptionSnapshot =
+          await db.collection("Adoption Request").get();
 
+      adoptionReqList = adoptionSnapshot.docs.map((doc) {
+        return AdoptionModel.fromJson(doc.data());
+      }).toList();
+      print("-------------------adoption requuest fetched ---------------");
+      print(helpReqList.length);
+      notifyListeners();
+    } catch (e) {
+      return customeShowDiolog("$e", context);
+    }
+  }
 
+  /////////////////////////////ADD DONATION ACCEPTENCE FROM USER////////////////////
+  addDonationAcceptecetoFireStore(
+      DonationAcceptedmodel donationAcceptedmodel, context, orphanId) async {
+    try {
+      final donationCollection = db
+          .collection("Orphanage")
+          .doc(orphanId)
+          .collection("Accepted Donations");
+      // final donationCollection = db.collection("Accepted Donations");
+      final docs = donationCollection.doc();
+      docs.set(donationAcceptedmodel.toJson(docs.id));
+      notifyListeners();
+      print("-------------------doantion accepted user  ---------------");
+    } catch (e) {
+      return customeShowDiolog("$e", context);
+    }
+  }
 
+  fetchAllDoanationAccepetence(context,currentuserId) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> donationSnapshot =
+          await db.collection("Orphanage").doc(currentuserId).collection("Accepted Donations").get();
 
-  /////////////////////////////Support orphange to favorate////////////////////
+      donationAcceptenceList = donationSnapshot.docs.map((doc) {
+        return DonationAcceptedmodel.fromJson(doc.data());
+      }).toList();
+      print("-------------------donation  list fetched ---------------");
 
+      notifyListeners();
+    } catch (e) {
+      return customeShowDiolog("$e", context);
+    }
+  }
 }
-  //////////////////////////////////////
-  /////////////////////////////
-  //////////////////////////////////fetch Supprting orohanage Nmae Na image////////////
-  // fectSupportingData(selectedUserId, index, ) async {
-//    QuerySnapshot<Map<String, dynamic>> snapshotOrphan =
-//         await db.collection("Orphanage").get();
-//  final data= storeInstence.  orphanageList = snapshotOrphan.docs.map((doc) {
-//       return OrphnRegModel.fromJson(doc.data());
-//     }).toList();
-//     print("-------fetch orphn-------------");
-//     print(data[index].orphnName);
-//     if (data[index].orphnId == selectedUserId) {
-//       supportList.add(SupportOrphanModel(
-//           image: data[index].image!, name: data[index].orphnName));
-//     }
-//     print("completed");
-//   }
-// }
-
-// List<SupportOrphanModel> supportList = [];
-
-// class SupportOrphanModel {
-//   String image;
-//   String name;
-//   SupportOrphanModel({required this.image, required this.name});
-// }

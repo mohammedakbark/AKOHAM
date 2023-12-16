@@ -4,9 +4,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_gradient_button.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/custome_widgets/easyButton.dart';
+import 'package:orphanagemanagement/viewmodel/store_image.dart';
 
 class EditProfileImageOrganization extends StatelessWidget {
   const EditProfileImageOrganization({super.key});
@@ -31,17 +34,17 @@ class EditProfileImageOrganization extends StatelessWidget {
           Stack(
             alignment: Alignment.topCenter,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.network(
-                    'https://s3-alpha-sig.figma.com/img/fa20/bc06/2deb16afff00b283a126f9a481cc148d?Expires=1702252800&Signature=b9iRbTh9yLYbkE68~FSYMaDa1Lh0zzqNV-a8IKciexYYuYXp9AE5XJR93u0JQD1x9ph6AeCYAB65t7vda58fNOWEaYXU5FOH9LxGT-GfbUZKhC-6hUowW2gUnOk5AqUJnFoVB5l3XaKvnZBqhaZ7aY3N2lxcVbXi5pYWzgqIfjP5lFHPgEbhCognYoZue3tiN5vDA3iEyv3MqndDFyFsmMmwEasEzFP~DnpLP1fFULJaY3G7ioA09B~g5vBzaJXVFQH~eN-GKvminC5FKqQtu4cWRoGu7uWdKfPNX4jANk0IZJdu4PW1PFqvkayprGEI0d4j1y8Uzw1OjjeHJh179g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-                    // scale: 40,
-                    fit: BoxFit.fill,
-                  ),
-                ),
+              Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: storeInstence.orgnRegModel!.image == ""
+                            ? imageNotFound
+                            : NetworkImage(
+                                storeInstence.orgnRegModel!.image!))),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 95),
@@ -62,7 +65,10 @@ class EditProfileImageOrganization extends StatelessWidget {
           ),
           Gap(50),
           InkWell(
-            onTap: () {},
+            onTap: () async {
+              await selectImage(context).then((value) =>
+                  storeInstence.uploadUsersImageToFirebase(imageFile!));
+            },
             child: Container(
               height: hight * .04,
               width: width * .5,
@@ -84,6 +90,10 @@ class EditProfileImageOrganization extends StatelessWidget {
             height: hight * .04,
             width: width * .5,
             child: easyButton(
+              onpressed: ()async {
+              await  storeInstence.deleteOrganizationImage(currentUserId);
+              await  storeInstence.fetchCurrentOrganization(currentUserId);
+              },
               borderColor: grey600,
               bordRadius: 50,
               bordersideWidth: 3.0,
@@ -100,7 +110,7 @@ class EditProfileImageOrganization extends StatelessWidget {
             width: width * .3,
             child: customeGradientButtom(
                 onpressed: () {
-                  Get.back();
+                  storeInstence.fetchCurrentOrganization(currentUserId);
                 },
                 context: context,
                 text: "Save",

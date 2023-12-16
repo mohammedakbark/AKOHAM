@@ -6,56 +6,64 @@ import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/Notification/adoption%20requesst/adoptin_requested_user.dart';
+import 'package:orphanagemanagement/viewmodel/services_provider.dart';
+import 'package:provider/provider.dart';
 
 class AdoptionRequestNotifiOrphanage extends StatelessWidget {
   AdoptionRequestNotifiOrphanage({super.key});
-  String time = DateFormat('h:mm a').format(DateTime.now());
-  String day = DateFormat('EEEE').format(DateTime.now());
-  String date = DateFormat("dd/m/yyyy").format(DateTime.now());
+  // String time = DateFormat('h:mm a').format(DateTime.now());
+  // String day = DateFormat('EEEE').format(DateTime.now());
+  // String date = DateFormat("dd/m/yyyy").format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
+    // Provider.of<ServiceProvider>(context, listen: false)
+    //     .fetchAllAdoptionRequests(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: customeText(text: "Notification"),
         ),
-        body: Container(
-            margin: const EdgeInsets.all(20),
-            height: double.infinity,
-            width: double.infinity,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Gap(20),
-              customeText(text: "Adoption request", size: 22),
-              const Gap(20),
-              Expanded(
-                child: ListView.separated(
-                    itemBuilder: (context, index) => adoptionRequest(
-                        ontap: () {
-                          Get.to(AdoptionRequestedUserProfileOrphanage());
-                        },
-                        userImage: imageNotFound,
-                        requestText:
-                            "Useruserr requested for adoption - of a child"
-                            "Useruserr requested for adoption - of a child"
-                            "Useruserr requested for adoption - of a child",
-                        day: day,
-                        requestDate: date,
-                        requestTime: time),
-                    separatorBuilder: (context, index) => Gap(30),
-                    itemCount: 5),
-              )
-            ])));
+        body: Consumer<ServiceProvider>(builder: (context, service, child) {
+          return Container(
+              margin: const EdgeInsets.all(20),
+              height: double.infinity,
+              width: double.infinity,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Gap(20),
+                    customeText(text: "Adoption request", size: 22),
+                    const Gap(20),
+                    Expanded(
+                      child: ListView.separated(
+                          itemBuilder: (context, index) => adoptionRequest(
+                              ontap: () {
+                                Get.to(AdoptionRequestedUserProfileOrphanage(
+                                  userType: service.adoptionReqList[index].userType,
+                                  slectedUID: service.adoptionReqList[index].senderId,
+                                  childInd: service.adoptionReqList[index].childId,
+                                ));
+                              },
+                              userImage:
+                                  service.adoptionReqList[index].image == ""
+                                      ? imageNotFound
+                                      : NetworkImage(
+                                          service.adoptionReqList[index].image),
+                              requestText:
+                                  "Useruserr requested for adoption - of a child",
+                              dateAndDay:
+                                  service.adoptionReqList[index].dataAndDay,
+                              time: service.adoptionReqList[index].time),
+                          separatorBuilder: (context, index) => Gap(30),
+                          itemCount: service.adoptionReqList.length),
+                    )
+                  ]));
+        }));
   }
 
   Widget adoptionRequest(
-      {userImage,
-      String? requestText,
-      requestDate,
-      day,
-      requestTime,
-      Function()? ontap}) {
+      {userImage, String? requestText, dateAndDay, time, Function()? ontap}) {
     return InkWell(
       onTap: ontap,
       child: Container(
@@ -66,10 +74,7 @@ class AdoptionRequestNotifiOrphanage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            customeText(
-                textcolor: grey600,
-                text: "${requestDate.toString()} ${day.toString()}",
-                size: 10),
+            customeText(textcolor: grey600, text: "${dateAndDay}", size: 10),
             Gap(6),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -78,8 +83,11 @@ class AdoptionRequestNotifiOrphanage extends StatelessWidget {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(39),
-                      image: DecorationImage(image: userImage)),
+                      shape: BoxShape.circle,
+
+                      // borderRadius: BorderRadius.circular(39),
+                      image:
+                          DecorationImage(fit: BoxFit.fill, image: userImage)),
                 ),
                 Gap(20),
                 SizedBox(
@@ -99,8 +107,7 @@ class AdoptionRequestNotifiOrphanage extends StatelessWidget {
                 ),
               ],
             ),
-            customeText(
-                text: requestTime.toString(), textcolor: grey600, size: 10)
+            customeText(text: time.toString(), textcolor: grey600, size: 10)
           ],
         ),
       ),

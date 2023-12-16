@@ -18,8 +18,8 @@ import 'package:orphanagemanagement/viewmodel/firestore.dart';
 
 class NextSignPageOrganization extends StatefulWidget {
   TextEditingController email = TextEditingController();
-  String ?uid;
-  NextSignPageOrganization({super.key, required this.email,required this.uid});
+  String? uid;
+  NextSignPageOrganization({super.key, required this.email, required this.uid});
 
   @override
   State<NextSignPageOrganization> createState() =>
@@ -115,7 +115,7 @@ class _NextSignPageOrganizationState extends State<NextSignPageOrganization> {
                   ),
                   Gap(50),
                   TextFormField(
-                    controller:widget. email,
+                    controller: widget.email,
                     decoration: InputDecoration(
                       labelText: "Email",
                       suffix: customeText(text: ".com", textcolor: grey600),
@@ -187,10 +187,10 @@ class _NextSignPageOrganizationState extends State<NextSignPageOrganization> {
 
     fireStore.addOrganizationToFirestore(OrgnRegModel(
         image: "",
-      loginId: widget.uid,
-        orhnName: orgName.text,
+        loginId: widget.uid,
+        orgName: orgName.text,
         contactNumber: conNumbr,
-        email:widget. email.text,
+        email: widget.email.text,
         location: location.text,
         about: about.text));
   }

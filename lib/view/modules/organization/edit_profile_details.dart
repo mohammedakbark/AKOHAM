@@ -2,12 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:orphanagemanagement/model/organization/orgna_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_gradient_button.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 
 class EditProfileDetailOrganization extends StatelessWidget {
-  const EditProfileDetailOrganization({super.key});
+  EditProfileDetailOrganization({
+    super.key,
+  });
+
+  TextEditingController namectr =
+      TextEditingController(text: storeInstence.orgnRegModel?.orgName);
+  TextEditingController contactNumberctr = TextEditingController(
+      text: storeInstence.orgnRegModel?.contactNumber.toString());
+  TextEditingController emailctr =
+      TextEditingController(text: storeInstence.orgnRegModel?.email);
+  TextEditingController locationctr =
+      TextEditingController(text: storeInstence.orgnRegModel?.location);
+  TextEditingController aboutctr =
+      TextEditingController(text: storeInstence.orgnRegModel?.about);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +46,7 @@ class EditProfileDetailOrganization extends StatelessWidget {
               Column(
                 children: [
                   TextFormField(
+                    controller: namectr,
                     decoration: InputDecoration(
                       labelText: "Name",
                       labelStyle: GoogleFonts.jua(color: black),
@@ -48,6 +64,7 @@ class EditProfileDetailOrganization extends StatelessWidget {
                     children: [
                       customeText(text: "Contact No", size: 16),
                       TextFormField(
+                        controller: contactNumberctr,
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderRadius:
@@ -63,9 +80,11 @@ class EditProfileDetailOrganization extends StatelessWidget {
                   ),
                   Gap(50),
                   TextFormField(
+                    controller: emailctr,
                     decoration: InputDecoration(
+                      enabled: false,
                       labelText: "Email",
-                      suffix: customeText(text: ".com", textcolor: grey600),
+                      // suffix: customeText(text: ".com", textcolor: grey600),
                       labelStyle: GoogleFonts.jua(color: black),
                       enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: Black54)),
@@ -81,6 +100,23 @@ class EditProfileDetailOrganization extends StatelessWidget {
                     children: [
                       customeText(text: "Location", size: 16),
                       TextFormField(
+                        controller: locationctr,
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(color: Black54)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(color: Black54)),
+                        ),
+                      ),
+                      Gap(30),
+                      customeText(text: "About", size: 16),
+                      TextFormField(
+                        maxLines: 5,
+                        controller: aboutctr,
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderRadius:
@@ -99,7 +135,18 @@ class EditProfileDetailOrganization extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * .5,
                     child: customeGradientButtom(
                       onpressed: () {
-                        Get.back();
+                        int conNumber = int.parse(contactNumberctr.text);
+                        storeInstence.updateOrganizationDetails(
+                            currentUserId,
+                            OrgnRegModel(
+                                image: storeInstence.orgnRegModel?.image,
+                                loginId: storeInstence.orgnRegModel?.loginId,
+                                orgName: namectr.text,
+                                contactNumber: conNumber,
+                                email: emailctr.text,
+                                location: locationctr.text,
+                                about: aboutctr.text));
+                        storeInstence.fetchCurrentOrganization(currentUserId);
                       },
                       context: context,
                       text: "Save",

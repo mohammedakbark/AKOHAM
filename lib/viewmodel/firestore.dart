@@ -21,6 +21,8 @@ import 'package:orphanagemanagement/viewmodel/store_image.dart';
 final db = FirebaseFirestore.instance;
 
 class FireStore with ChangeNotifier {
+  bool isRemove = false;
+  bool isSave = false;
   ChildDataRegModel? childDataRegModel;
   ChildHealthReportModel? childHealthReportModel;
   LoginTable? loginTable;
@@ -29,6 +31,7 @@ class FireStore with ChangeNotifier {
   IndivRegModel? indivRegModel;
   OrgnRegModel? orgnRegModel;
   List<SupportingOrphanModel>? supportingList;
+  SupportingOrphanModel? supportingOrphanModel;
 ////////////////////////////ORPHANAGE//////////////////////////
   List<OrphnRegModel> orphanageList = [];
   List<BankDetailModel> bankList = [];
@@ -112,9 +115,6 @@ class FireStore with ChangeNotifier {
     docs.set(supportingOrphanModel.toJson(currentUID, currentOrphanageId));
   }
 
-
-  
-
   getAllSupportingOrphanageinIndividual(currentUID) async {
     QuerySnapshot<Map<String, dynamic>> indSuppSnapshot = await db
         .collection("Individual")
@@ -167,11 +167,11 @@ class FireStore with ChangeNotifier {
 
   getAllSupportingOrphanageinOrganization(currentUID) async {
     QuerySnapshot<Map<String, dynamic>> orgSuppSnapshot = await db
-        .collection("Individual")
+        .collection("Organization")
         .doc(currentUID)
         .collection("Supporting Orphanages")
         .get();
-        supportingList = orgSuppSnapshot.docs.map((doc) {
+    supportingList = orgSuppSnapshot.docs.map((doc) {
       return SupportingOrphanModel.fromJson(doc.data());
     }).toList();
     notifyListeners();
@@ -313,6 +313,7 @@ class FireStore with ChangeNotifier {
       print(
           "------------fetch completed ,have the current user data---------------------");
       print("------------fetch completed individual---------------------");
+      notifyListeners();
       Get.to(() => MainPageIndividual(
             selectedIndex: 1,
             // indivRegModel: indivRegModel,
@@ -333,9 +334,9 @@ class FireStore with ChangeNotifier {
       print(
           "------------fetch completed ,have the current user data---------------------");
       print("------------fetch completed Organization---------------------");
+      notifyListeners();
       Get.to(() => MainPageOrganization(
             selectedIndex: 1,
-            orgnRegModel: orgnRegModel,
           ));
     } else {
       print("error");
@@ -344,6 +345,8 @@ class FireStore with ChangeNotifier {
 
   ////////////////////UPLOAD IMAGEAND DELETE IMAGE //////////////////
   uploadUsersImageToFirebase(File file) async {
+    isSave = true;
+    notifyListeners();
     DocumentSnapshot<Map<String, dynamic>> userSnapshot =
         await db.collection("user").doc(currentUserId).get();
     if (userSnapshot.exists) {
@@ -367,8 +370,8 @@ class FireStore with ChangeNotifier {
               orphanSnapshot.data() as Map<String, dynamic>);
 
           print("---------orphn img successfully uploaded --------------");
+
           notifyListeners();
-          return value;
         } else if (type == "Organization") {
           DocumentReference docRef =
               db.collection('Organization').doc(currentUserId);
@@ -388,11 +391,13 @@ class FireStore with ChangeNotifier {
           indivRegModel = IndivRegModel.fromJson(
               individualSnapshot.data() as Map<String, dynamic>);
           print("---------indi img successfully uploaded --------------");
+          isSave = false;
           notifyListeners();
         }
       });
       notifyListeners();
     }
+    // return isSave;
   }
 
   deleteOrphanageImage(uid) {
@@ -404,6 +409,12 @@ class FireStore with ChangeNotifier {
   deleteindividualImage(id) {
     final indiRef = db.collection("Individual");
     indiRef.doc(id).update({"image": ""});
+    notifyListeners();
+  }
+
+  deleteOrganizationImage(id) {
+    final orgRef = db.collection("Organization");
+    orgRef.doc(id).update({"image": ""});
     notifyListeners();
   }
 
@@ -455,7 +466,20 @@ class FireStore with ChangeNotifier {
     notifyListeners();
   }
 
-  ////////////////////////Get Selected ORPHANAGE///////////////
+/////////////////////////////////Update Organaization Details///////////////////////////////
+  updateOrganizationDetails(currentUID, OrgnRegModel orgnRegModel) async {
+    final orgRef = db.collection('Organization');
+
+    final orgDec = orgRef.doc(currentUID);
+    orgDec.update(orgnRegModel.toJson(currentUID));
+    DocumentSnapshot indSnapshot = await orgDec.get();
+    indivRegModel =
+        IndivRegModel.fromJson(indSnapshot.data() as Map<String, dynamic>);
+
+    notifyListeners();
+  }
+
+  ////////////////////////Get Selected ORPHANAGE    Organization   Idicdual///////////////
   getSelectedOrphanageData(orphnId) async {
     DocumentSnapshot orphanageSnapshot =
         await db.collection("Orphanage").doc(orphnId).get();
@@ -474,6 +498,58 @@ class FireStore with ChangeNotifier {
       print(
           "------------fetch completed ,have the selected orphanage data---------------------");
     }
+
+    notifyListeners();
+  }
+
+  getSelectedOrganizationData(orgId) async {
+    DocumentSnapshot organizationSnapshot =
+        await db.collection("Organization").doc(orgId).get();
+    DocumentSnapshot supportingSnapshot = await db
+        .collection("Organization")
+        .doc(orgId)
+        .collection("Supporting Orphanages")
+        .doc(orgId)
+        .get();
+
+    if (organizationSnapshot.exists) {
+      orgnRegModel = OrgnRegModel.fromJson(
+          organizationSnapshot.data() as Map<String, dynamic>);
+    }
+    if (supportingSnapshot.exists) {
+      supportingOrphanModel = SupportingOrphanModel.fromJson(
+          supportingSnapshot.data() as Map<String, dynamic>);
+    }
+
+    print(
+        "------------fetch completed ,have the selected organization  data---------------------");
+
+    notifyListeners();
+  }
+
+  getSelectedIndividualData(indId) async {
+    DocumentSnapshot individualSnapshot =
+        await db.collection("Individual").doc(indId).get();
+    DocumentSnapshot supportingSnapshot = await db
+        .collection("Individual")
+        .doc(indId)
+        .collection("Supporting Orphanages")
+        .doc(indId)
+        .get();
+
+    if (individualSnapshot.exists) {
+      indivRegModel = IndivRegModel.fromJson(
+          individualSnapshot.data() as Map<String, dynamic>);
+      notifyListeners();
+    }
+    if (supportingSnapshot.exists) {
+      supportingOrphanModel = SupportingOrphanModel.fromJson(
+          supportingSnapshot.data() as Map<String, dynamic>);
+      notifyListeners();
+    }
+
+    print(
+        "------------fetch completed ,have the selected Individual data---------------------");
 
     notifyListeners();
   }

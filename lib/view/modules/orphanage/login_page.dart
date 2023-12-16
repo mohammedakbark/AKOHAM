@@ -42,7 +42,7 @@ class LoginPageOrphanage extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   height:
-                      orientation == landScapeMode ? hight * .4 : hight * .18,
+                      orientation == landScapeMode ? hight * .4 : hight * .20,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

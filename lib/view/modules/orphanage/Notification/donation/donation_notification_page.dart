@@ -7,24 +7,11 @@ import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/Notification/adoption%20requesst/adoptin_requested_user.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/Notification/donation/donated_user_data.dart';
+import 'package:orphanagemanagement/viewmodel/services_provider.dart';
+import 'package:provider/provider.dart';
 
 class DonationNotifiOrphanage extends StatelessWidget {
   DonationNotifiOrphanage({super.key});
-  String time = DateFormat('h:mm a').format(DateTime.now());
-  String day = DateFormat('EEEE').format(DateTime.now());
-  String date = DateFormat("dd/m/yyyy").format(DateTime.now());
-
-  Color getColorForText({String? userType}) {
-    // Use the enum directly to determine the color based on the text
-    switch (userType) {
-      case "Organization":
-        return Colors.blue;
-      case "Individual":
-        return Colors.green;
-      default:
-        return Colors.transparent;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,52 +20,56 @@ class DonationNotifiOrphanage extends StatelessWidget {
           centerTitle: true,
           title: customeText(text: "Notification"),
         ),
-        body: Container(
-            margin: const EdgeInsets.all(20),
-            height: double.infinity,
-            width: double.infinity,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Gap(20),
-              Expanded(
-                child: ListView.separated(
-                    itemBuilder: (context, index) => InkWell(
-                          onTap: () {
-                            Get.to(AdoptionRequestedUserProfileOrphanage());
-
-                            ////go to user profile
-                          },
-                          child: donationReplay(
+        body: Consumer<ServiceProvider>(builder: (context, service, child) {
+          return Container(
+              margin: const EdgeInsets.all(20),
+              height: double.infinity,
+              width: double.infinity,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Gap(20),
+                    Expanded(
+                      child: ListView.separated(
+                          itemBuilder: (context, index) => donationReplay(
                               ontap: () {
                                 Get.to(DonatedUserProfileOrphanage(
-                                  userType: index.isEven
-                                      ? "Individual"
-                                      : "Organization",
-                                ));
+                                    selectedUId: service
+                                        .donationAcceptenceList[index].userid,
+                                    userType: service
+                                        .donationAcceptenceList[index]
+                                        .userType));
                               },
-                              userType:
-                                  index.isEven ? "Individual" : "Organization",
-                              userImage: imageNotFound,
+                              userType: service
+                                  .donationAcceptenceList[index].userType,
+                              userTypeColor: service
+                                          .donationAcceptenceList[index]
+                                          .userType ==
+                                      "Individual"
+                                  ? green
+                                  : blue,
+                              userImage: NetworkImage(service
+                                      .donationAcceptenceList[index].image) ??
+                                  imageNotFound,
                               requestText:
-                                  "Useruserr requested for adoption - of a child"
-                                  "Useruserr requested for adoption - of a child"
-                                  "Useruserr requested for adoption - of a child",
-                              day: day,
-                              requestDate: date,
-                              requestTime: time),
-                        ),
-                    separatorBuilder: (context, index) => Gap(30),
-                    itemCount: 5),
-              )
-            ])));
+                                  service.donationAcceptenceList[index].data,
+                              requestDateAndDay: service
+                                  .donationAcceptenceList[index].dateAndDay,
+                              requestTime:
+                                  service.donationAcceptenceList[index].time),
+                          separatorBuilder: (context, index) => Gap(30),
+                          itemCount: service.donationAcceptenceList.length),
+                    )
+                  ]));
+        }));
   }
 
   Widget donationReplay(
       {userType,
       userImage,
       String? requestText,
-      requestDate,
-      day,
+      requestDateAndDay,
+      Color? userTypeColor,
       requestTime,
       Function()? ontap}) {
     return InkWell(
@@ -94,16 +85,12 @@ class DonationNotifiOrphanage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                customeText(text: userType, textcolor: userTypeColor),
                 customeText(
-                    text: userType,
-                    textcolor: getColorForText(userType: userType)),
-                customeText(
-                    textcolor: grey600,
-                    text: "${requestDate.toString()} ${day.toString()}",
-                    size: 10),
+                    textcolor: grey600, text: requestDateAndDay, size: 10),
               ],
             ),
-           const Gap(6),
+            const Gap(6),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -111,8 +98,10 @@ class DonationNotifiOrphanage extends StatelessWidget {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      image: DecorationImage(image: userImage)),
+                      shape: BoxShape.circle,
+                      // borderRadius: BorderRadius.circular(50),
+                      image:
+                          DecorationImage(fit: BoxFit.fill, image: userImage)),
                 ),
                 Gap(20),
                 SizedBox(

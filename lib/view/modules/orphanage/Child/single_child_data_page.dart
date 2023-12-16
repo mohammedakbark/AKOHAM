@@ -29,7 +29,7 @@ class SingleChildDataOrphanage extends StatelessWidget {
         centerTitle: true,
         title: customeText(text: "Child Details"),
       ),
-      body: Consumer<FireStore>(builder: (context, controller, child) {
+      body: Consumer<FireStore>(builder: (context, firestore, child) {
         return Container(
           margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
           height: double.infinity,
@@ -43,10 +43,10 @@ class SingleChildDataOrphanage extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       image: DecorationImage(
-                          image: controller.childDataRegModel?.image == null
+                          image: firestore.childDataRegModel?.image == null
                               ? imageNotFound
                               : NetworkImage(
-                                  "${controller.childDataRegModel?.image}"))),
+                                  "${firestore.childDataRegModel?.image}"))),
                 ),
                 Gap(4),
                 customeText(
@@ -97,46 +97,45 @@ class SingleChildDataOrphanage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.name}"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.nickNmae}"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.age} Years"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.gender}"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.dirthdate}"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.joinDate}"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.location}"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.bloodGroup}"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.orphanType}"),
-                              BlankTextField(
-                                  context: context,
-                                  hintText:
-                                      "${controller.childDataRegModel?.adoptionStatus}"),
+                              customeText(
+                                  text: "${firestore.childDataRegModel?.name}",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.nickNmae}",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.age} Years",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.gender}",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.dirthdate}",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.joinDate}",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.location}",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.bloodGroup}",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.orphanType}",
+                                  size: 16),
+                              customeText(
+                                  text:
+                                      "${firestore.childDataRegModel?.adoptionStatus}",
+                                  size: 16),
                             ],
                           )
                         ],
@@ -191,30 +190,30 @@ class SingleChildDataOrphanage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                BlankTextField(
-                                    context: context,
-                                    hintText:
-                                        "${controller.childHealthReportModel?.medicalStatus}"),
-                                BlankTextField(
-                                    context: context,
-                                    hintText:
-                                        "${controller.childHealthReportModel?.diseases}"),
-                                BlankTextField(
-                                    context: context,
-                                    hintText:
-                                        "${controller.childHealthReportModel?.disabilities}"),
-                                BlankTextField(
-                                    context: context,
-                                    hintText:
-                                        "${controller.childHealthReportModel?.heght}"),
-                                BlankTextField(
-                                    context: context,
-                                    hintText:
-                                        "${controller.childHealthReportModel?.weight}"),
-                                BlankTextField(
-                                    context: context,
-                                    hintText:
-                                        "${controller.childHealthReportModel?.medicines}"),
+                                customeText(
+                                    text:
+                                        "${firestore.childHealthReportModel?.medicalStatus}",
+                                    size: 16),
+                                customeText(
+                                    text:
+                                        "${firestore.childHealthReportModel?.diseases}",
+                                    size: 16),
+                                customeText(
+                                    text:
+                                        "${firestore.childHealthReportModel?.disabilities}",
+                                    size: 16),
+                                customeText(
+                                    text:
+                                        "${firestore.childHealthReportModel?.heght}",
+                                    size: 16),
+                                customeText(
+                                    text:
+                                        "${firestore.childHealthReportModel?.weight}",
+                                    size: 16),
+                                customeText(
+                                    text:
+                                        "${firestore.childHealthReportModel?.medicines}",
+                                    size: 16),
                               ],
                             )
                           ],
@@ -230,7 +229,8 @@ class SingleChildDataOrphanage extends StatelessWidget {
                   child: ElevatedButton(
                       onPressed: () {
                         Get.to(EditChildDetailPageOrphanage(
-                          childID: childId,
+                          childID: childId,childDataRegModel: firestore.childDataRegModel!,childHealthReportModel: firestore.childHealthReportModel!,
+
                         ));
                       },
                       style: ButtonStyle(
@@ -255,7 +255,7 @@ class SingleChildDataOrphanage extends StatelessWidget {
                   child: OutlinedButton(
                       onPressed: () {
                         storeInstence.removeChild(childId);
-                        Get.to(()=>ChildDetailsTabOrphanage());
+                        Get.to(() => ChildDetailsTabOrphanage());
                       },
                       style: ButtonStyle(
                           shape: MaterialStateProperty.all(

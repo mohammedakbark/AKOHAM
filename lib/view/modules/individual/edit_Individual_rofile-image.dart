@@ -70,8 +70,11 @@ class EditProfileImageIndividual extends StatelessWidget {
             ),
             Gap(50),
             InkWell(
-              onTap: () {
-                selectImage(context);
+              onTap: () async {
+                // firstore.isSave = true;
+                await selectImage(context).then((value) =>
+                    storeInstence.uploadUsersImageToFirebase(imageFile!));
+                      storeInstence.fetchCurrentIndividual(currentUserId);
               },
               child: Container(
                 height: hight * .04,
@@ -95,9 +98,9 @@ class EditProfileImageIndividual extends StatelessWidget {
               height: hight * .04,
               width: width * .5,
               child: easyButton(
-                onpressed: () {
-                  firstore.deleteindividualImage(currentUserId);
-                  storeInstence.fetchCurrentIndividual(currentUserId);
+                onpressed: () async {
+                  await firstore.deleteindividualImage(currentUserId);
+                          storeInstence.fetchCurrentIndividual(currentUserId);
                 },
                 borderColor: grey600,
                 bordRadius: 50,
@@ -115,7 +118,6 @@ class EditProfileImageIndividual extends StatelessWidget {
               width: width * .3,
               child: customeGradientButtom(
                   onpressed: () {
-                    storeInstence.uploadUsersImageToFirebase(imageFile!);
                     storeInstence.fetchCurrentIndividual(currentUserId);
                   },
                   context: context,

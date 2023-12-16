@@ -3,11 +3,13 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_textfield.dart';
 import 'package:orphanagemanagement/view/modules/organization/main_page_organization.dart';
 import 'package:orphanagemanagement/view/modules/organization/suport_sigle_orphanage.dart';
-
+import 'package:orphanagemanagement/viewmodel/firestore.dart';
+import 'package:provider/provider.dart';
 
 class SupportingPageOrganization extends StatefulWidget {
   const SupportingPageOrganization({super.key});
@@ -21,57 +23,65 @@ class _SupportingPageOrganizationState
     extends State<SupportingPageOrganization> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<FireStore>(context, listen: false)
+        .getAllSupportingOrphanageinOrganization(currentUserId);
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-        body: Container(
-          height: hight,
-          width: width,
-          margin: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Gap(60),
-              customeText(text: "Home", size: 26),
-              Gap(20),
-              customeTextField(
-                prefixicon: Image.asset(
-                  "assets/search.png",
-                  scale: 20,
-                ),
-                radius: 30,
-                fillcolor: appThemeGrey,
-                hintText: 'Search an orphanage',
-              ),
-              const Gap(20),
-              IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: Image.asset(
-                    "assets/leftarrow.png",
+        body: Consumer<FireStore>(builder: (context, firestore, child) {
+          final supportingdData = firestore.supportingList;
+          return Container(
+            height: hight,
+            width: width,
+            margin: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Gap(60),
+                customeText(text: "Home", size: 26),
+                Gap(20),
+                customeTextField(
+                  prefixicon: Image.asset(
+                    "assets/search.png",
                     scale: 20,
-                  )),
-              customeText(text: "Supporting", size: 22),
-              const Gap(15),
-              Expanded(
-                  child: ListView.separated(
-                      itemBuilder: (context, index) => exploreOrphanages(
-                          onTap: () {
-                            Get.to(SupportSingleOrphanagePafeOrganization());
-                          },
-                          hight: hight,
-                          width: width,
-                          orphnName: "Orphane Nmae",
-                          numOfChile: "Number of Child",
-                          contNumber: "context niumber",
-                          srcimg:
-                              "https://s3-alpha-sig.figma.com/img/fa20/bc06/2deb16afff00b283a126f9a481cc148d?Expires=1702252800&Signature=b9iRbTh9yLYbkE68~FSYMaDa1Lh0zzqNV-a8IKciexYYuYXp9AE5XJR93u0JQD1x9ph6AeCYAB65t7vda58fNOWEaYXU5FOH9LxGT-GfbUZKhC-6hUowW2gUnOk5AqUJnFoVB5l3XaKvnZBqhaZ7aY3N2lxcVbXi5pYWzgqIfjP5lFHPgEbhCognYoZue3tiN5vDA3iEyv3MqndDFyFsmMmwEasEzFP~DnpLP1fFULJaY3G7ioA09B~g5vBzaJXVFQH~eN-GKvminC5FKqQtu4cWRoGu7uWdKfPNX4jANk0IZJdu4PW1PFqvkayprGEI0d4j1y8Uzw1OjjeHJh179g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"),
-                      separatorBuilder: (context, index) => Gap(20),
-                      itemCount: 3))
-            ],
-          ),
-        ),
+                  ),
+                  radius: 30,
+                  fillcolor: appThemeGrey,
+                  hintText: 'Search an orphanage',
+                ),
+                const Gap(20),
+                IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Image.asset(
+                      "assets/leftarrow.png",
+                      scale: 20,
+                    )),
+                customeText(text: "Supporting", size: 22),
+                const Gap(15),
+                Expanded(
+                    child: ListView.separated(
+                        itemBuilder: (context, index) => exploreOrphanages(
+                              onTap: () {
+                                Get.to(
+                                    SupportSingleOrphanagePafeOrganization(selectedOrphnID: supportingdData[index].orphanageId,));
+                              },
+                              hight: hight,
+                              width: width,
+                              orphnName: supportingdData[index].name,
+                              numOfChile: supportingdData[index].numberOfChild,
+                              contNumber: supportingdData[index].contactNumber,
+                              srcimg: supportingdData[index].image == ""
+                                  ? "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg"
+                                  : supportingdData[index].image,
+                            ),
+                        separatorBuilder: (context, index) => Gap(20),
+                        itemCount: supportingdData!.length))
+              ],
+            ),
+          );
+        }),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           onTap: (index) {

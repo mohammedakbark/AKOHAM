@@ -5,15 +5,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:orphanagemanagement/model/organization/orgna_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
+import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/organization/edit_organization_profile-image.dart';
 import 'package:orphanagemanagement/view/modules/organization/edit_profile_details.dart';
 import 'package:orphanagemanagement/view/modules/organization/settings_page.dart';
+import 'package:orphanagemanagement/viewmodel/firestore.dart';
+import 'package:provider/provider.dart';
 
 class ProfileTabOrganization extends StatefulWidget {
-  OrgnRegModel? orgnRegModel;
-  ProfileTabOrganization({super.key,required this.orgnRegModel});
+  ProfileTabOrganization({
+    super.key,
+  });
 
   @override
   State<ProfileTabOrganization> createState() => _ProfileTabOrganizationState();
@@ -40,14 +44,15 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
         ],
       ),
       body: Container(
-          margin:const EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
           height: double.infinity,
           width: double.infinity,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
-                  padding:const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  padding:
+                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   height: hight * .6,
                   width: width,
                   decoration: BoxDecoration(
@@ -73,25 +78,38 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                               borderRadius: BorderRadius.circular(49)),
                           child: Center(
                             child: customeText(
-                                text: "Organization", textcolor: blue, size: 17),
+                                text: "Organization",
+                                textcolor: blue,
+                                size: 17),
                           ),
                         ),
                       ),
-                      customeText(text:widget.orgnRegModel!.orhnName, size: 24),
+                      customeText(
+                          text: storeInstence.orgnRegModel!.orgName, size: 24),
                       Stack(
                         alignment: Alignment.topCenter,
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: SizedBox(
-                              height: 100,
-                              width: 100,
-                              child: Image.network(
-                                'https://s3-alpha-sig.figma.com/img/fa20/bc06/2deb16afff00b283a126f9a481cc148d?Expires=1702252800&Signature=b9iRbTh9yLYbkE68~FSYMaDa1Lh0zzqNV-a8IKciexYYuYXp9AE5XJR93u0JQD1x9ph6AeCYAB65t7vda58fNOWEaYXU5FOH9LxGT-GfbUZKhC-6hUowW2gUnOk5AqUJnFoVB5l3XaKvnZBqhaZ7aY3N2lxcVbXi5pYWzgqIfjP5lFHPgEbhCognYoZue3tiN5vDA3iEyv3MqndDFyFsmMmwEasEzFP~DnpLP1fFULJaY3G7ioA09B~g5vBzaJXVFQH~eN-GKvminC5FKqQtu4cWRoGu7uWdKfPNX4jANk0IZJdu4PW1PFqvkayprGEI0d4j1y8Uzw1OjjeHJh179g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-                                // scale: 40,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(50),
+                          //   child: Container(
+                          //       height: 100,
+                          //       width: 100,
+                          //       decoration: BoxDecoration(
+                          //           image:
+                          //               DecorationImage(image: imageNotFound))),
+                          // ),
+                          Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image:
+                                        storeInstence.orgnRegModel!.image == ""
+                                            ? imageNotFound
+                                            : NetworkImage(storeInstence
+                                                .orgnRegModel!.image!))),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 90),
@@ -102,9 +120,10 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                                       shape: CircleBorder(),
                                       backgroundColor: appThemeGrey),
                                   onPressed: () {
-                                    Get.to(const EditProfileImageOrganization());
+                                    Get.to(
+                                        const EditProfileImageOrganization());
                                   },
-                                  child:const Icon(
+                                  child: const Icon(
                                     Icons.edit,
                                     color: black,
                                     size: 15,
@@ -142,10 +161,19 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                customeText(text: widget.orgnRegModel!.orhnName, size: 20),
-                                customeText(text:"${widget.orgnRegModel!.contactNumber}", size: 20),
-                                customeText(text: widget.orgnRegModel!.email, size: 20),
-                                customeText(text: widget.orgnRegModel!.location, size: 20),
+                                customeText(
+                                    text: storeInstence.orgnRegModel!.orgName,
+                                    size: 20),
+                                customeText(
+                                    text:
+                                        "${storeInstence.orgnRegModel!.contactNumber}",
+                                    size: 20),
+                                customeText(
+                                    text: storeInstence.orgnRegModel!.email,
+                                    size: 20),
+                                customeText(
+                                    text: storeInstence.orgnRegModel!.location,
+                                    size: 20),
                               ],
                             )
                           ],
@@ -155,19 +183,19 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                           style: ElevatedButton.styleFrom(
                               elevation: 0, backgroundColor: appThemeGrey),
                           onPressed: () {
-                            Get.to(const EditProfileDetailOrganization());
+                            Get.to(EditProfileDetailOrganization());
                           },
                           child: customeText(
                               text: "Edit Profile", textcolor: black))
                     ],
                   ),
                 ),
-               const Gap(20),
+                const Gap(20),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: customeText(text: "About Us", size: 25)),
                 Container(
-                  padding:const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
                   width: width,
                   height: isExpanded ? hight * .25 : hight * .1,
                   decoration: BoxDecoration(
@@ -178,8 +206,8 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        // 
-                        widget.orgnRegModel!.about,
+                        //
+                        storeInstence.orgnRegModel!.about,
                         style: GoogleFonts.jua(fontSize: 13),
                         overflow: isExpanded
                             ? TextOverflow.clip

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:orphanagemanagement/model/other_models/donation_accepted_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/utils/images.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
+import 'package:orphanagemanagement/viewmodel/firebase_auth.dart';
 import 'package:orphanagemanagement/viewmodel/services_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:tabbar_gradient_indicator/tabbar_gradient_indicator.dart';
@@ -19,15 +21,15 @@ class NotificationTabIndividual extends StatefulWidget {
 
 class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
   int initialIndex = 0;
-  // String time = DateFormat('h:mm a').format(DateTime.now());
-  // String day = DateFormat('EEEE').format(DateTime.now());
-  // String date = DateFormat("dd/m/yyyy").format(DateTime.now());
+  String time = DateFormat('h:mm a').format(DateTime.now());
+  String day = DateFormat('EEEE').format(DateTime.now());
+  String date = DateFormat("dd/m/yyyy").format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
     Provider.of<ServiceProvider>(context, listen: false)
         .fetchAllHelpRequest(context);
-    final data = storeInstence.fetchAllOrphanages();
+    // final data = storeInstence.fetchAllOrphanages();
     print("${serviceProviderinstence.helpReqList.length}jvhhhhhhhhhh");
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -85,7 +87,26 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
                         orphanageName: service.helpReqList[index].name,
                         hight: hight,
                         width: width,
-                        ontap: () {},
+                        ontap: () {
+                          service.addDonationAcceptecetoFireStore(
+                              DonationAcceptedmodel(
+                                  orphanageId:
+                                      service.helpReqList[index].orphanId,
+                                  data:
+                                      "${storeInstence.indivRegModel!.name} is intrested to Donate ${service.helpReqList[index].reqType}",
+                                  dateAndDay: "$date $day",
+                                  donationCategory:
+                                      service.helpReqList[index].reqType,
+                                  image:
+                                      "${storeInstence.indivRegModel?.image}",
+                                  time: time,
+                                  userType: "Individual",
+                                  userid:
+                                      storeInstence.indivRegModel?.senderId),
+                              context,
+                              service.helpReqList[index].orphanId);
+                          noti("Intrest Send Successfull");
+                        },
                         requestdateAndday:
                             service.helpReqList[index].dataAndDay,
                         time: service.helpReqList[index].time,
@@ -101,7 +122,26 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
                       orphanageName: service.helpReqList[index].name,
                       width: width,
                       hight: hight,
-                      ontap: () {},
+                      ontap: () {
+                        service.addDonationAcceptecetoFireStore(
+                            DonationAcceptedmodel(
+                                orphanageId:
+                                    service.helpReqList[index].orphanId,
+                                data:
+                                    "${storeInstence.indivRegModel!.name} is intrested to Donate ${service.helpReqList[index].reqType}",
+                                dateAndDay: "$date $day",
+                                donationCategory:
+                                    service.helpReqList[index].reqType,
+                                image: service.helpReqList[index].image,
+                                time: time,
+                                userType: "Individual",
+                                userid: storeInstence.indivRegModel?.senderId),
+                            context,
+                            service.helpReqList[index].orphanId);
+                        noti("Intrest Send Successfull");
+                      },
+                      //
+                      //
                       requestdateAndday: service.helpReqList[index].dataAndDay,
                       time: service.helpReqList[index].time,
                       requestText: service.helpReqList[index].data,
@@ -126,71 +166,67 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
       time,
       requestdateAndday,
       Function()? ontap}) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-        height: 106,
-        decoration: BoxDecoration(
-            color: appThemeGrey, borderRadius: BorderRadius.circular(20)),
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 80),
-                  child: customeText(
-                      text: orphanageName, textcolor: grey600, size: 10),
-                ),
+    return Container(
+      height: 106,
+      decoration: BoxDecoration(
+          color: appThemeGrey, borderRadius: BorderRadius.circular(20)),
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 80),
+                child: customeText(
+                    text: orphanageName, textcolor: grey600, size: 10),
+              ),
 
-                customeText(
-                    textcolor: grey600, text: "${requestdateAndday}", size: 10),
-                // const Gap(6),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: userImage),
-                    borderRadius: BorderRadius.circular(100),
-                  ),
+              customeText(
+                  textcolor: grey600, text: "${requestdateAndday}", size: 10),
+              // const Gap(6),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: userImage),
+                  borderRadius: BorderRadius.circular(100),
                 ),
-                const Gap(20),
-                SizedBox(
-                  height: 50,
-                  width: width / 3,
+              ),
+              const Gap(20),
+              SizedBox(
+                height: 50,
+                width: width / 3,
+                child: customeText(
+                    text: requestText,
+                    overflow: TextOverflow.ellipsis,
+                    size: 14,
+                    maxLines: 2),
+              ),
+              const Gap(20),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  onPressed: ontap,
                   child: customeText(
-                      text: requestText,
-                      overflow: TextOverflow.ellipsis,
-                      size: 14,
-                      maxLines: 2),
-                ),
-                const Gap(20),
-                ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                    onPressed: () {},
-                    child: customeText(
-                      text: "Intrested",
-                      size: 12,
-                      textcolor: white,
-                    )),
-                const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  size: 18,
-                  color: black,
-                ),
-              ],
-            ),
-            customeText(text: time.toString(), textcolor: grey600, size: 10)
-          ],
-        ),
+                    text: "Intrested",
+                    size: 12,
+                    textcolor: white,
+                  )),
+              const Icon(
+                Icons.arrow_forward_ios_outlined,
+                size: 18,
+                color: black,
+              ),
+            ],
+          ),
+          customeText(text: time.toString(), textcolor: grey600, size: 10)
+        ],
       ),
     );
   }

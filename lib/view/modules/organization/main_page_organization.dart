@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:orphanagemanagement/model/organization/orgna_reg_model.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 
 import 'package:orphanagemanagement/view/modules/organization/tabs/home_tab.dart';
 import 'package:orphanagemanagement/view/modules/organization/tabs/notification_tab.dart';
@@ -7,8 +8,8 @@ import 'package:orphanagemanagement/view/modules/organization/tabs/profile_tab.d
 
 class MainPageOrganization extends StatefulWidget {
   int selectedIndex = 1;
-  OrgnRegModel ?orgnRegModel;
-  MainPageOrganization({super.key, required this.selectedIndex,this.orgnRegModel});
+
+  MainPageOrganization({super.key, required this.selectedIndex,});
 
   @override
   State<MainPageOrganization> createState() => _MainPageOrganizationState();
@@ -20,8 +21,8 @@ class _MainPageOrganizationState extends State<MainPageOrganization> {
   Widget build(BuildContext context) {
       List<Widget> pages = [
     NotificationTabOrganization(),
-    HomeTabOrganization(),
-    ProfileTabOrganization(orgnRegModel:widget. orgnRegModel,)
+  const  HomeTabOrganization(),
+    ProfileTabOrganization()
   ];
 
     return Scaffold(
