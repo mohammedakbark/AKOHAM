@@ -237,7 +237,10 @@ class FireStore with ChangeNotifier {
 
   removeChild(chilId) async {
     final childRef = db.collection("Child Data");
-    childRef.doc(chilId).delete();
+   childRef.doc(chilId).delete();
+   
+    // final subColectionRef = childRef.doc(chilId).collection("Helth Report");
+    // subColectionRef.doc(subColectionRef.id).delete();
   }
 
 ////////////////////add login data //////////////////

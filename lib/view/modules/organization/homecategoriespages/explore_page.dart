@@ -62,15 +62,19 @@ class _ExplorePageInHomeOrganizationState
                     child: ListView.separated(
                         itemBuilder: (context, index) => exploreOrphanages(
                             onTap: () {
-                              Get.to(ExploreSingleOrphanagePageOrganization(orphId: data[index].orphnId,));
+                              Get.to(ExploreSingleOrphanagePageOrganization(
+                                orphId: data[index].orphnId,
+                              ));
                             },
                             hight: hight,
                             width: width,
+                            location: data[index].location,
                             orphnName: data[index].orphnName,
-                            numOfChile:"${data[index].childCount}",
+                            numOfChile: "${data[index].childCount}",
                             contNumber: "${data[index].contactNumber}",
-                            srcimg:data[index].image==""?'https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg' :data[index].image!
-                                ),
+                            srcimg: data[index].image == ""
+                                ? 'https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg'
+                                : data[index].image!),
                         separatorBuilder: (context, index) => Gap(20),
                         itemCount: data.length))
               ],
@@ -124,6 +128,7 @@ class _ExplorePageInHomeOrganizationState
       width,
       orphnName,
       numOfChile,
+      location,
       contNumber,
       required String srcimg,
       Function()? onTap}) {
@@ -142,19 +147,20 @@ class _ExplorePageInHomeOrganizationState
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
+                Container(
                   height: 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      srcimg,
-                    ),
+                  width: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill, image: NetworkImage(srcimg)),
                   ),
                 ),
               ],
             ),
             SizedBox(
               height: 100,
+              width: 150,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +174,7 @@ class _ExplorePageInHomeOrganizationState
                         Icons.location_on_outlined,
                         color: blue,
                       ),
-                      customeText(text: "Location", textcolor: blue)
+                      customeText(text: location, textcolor: blue)
                     ]),
                   )
                 ],

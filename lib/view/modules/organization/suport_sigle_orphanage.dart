@@ -5,13 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
-import 'package:orphanagemanagement/view/custome_widgets/blank_textfield.dart';
-import 'package:orphanagemanagement/view/custome_widgets/custome_gradient_button.dart';
+
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/organization/child_list_page.dart';
 import 'package:orphanagemanagement/view/modules/organization/main_page_organization.dart';
 
-import 'package:orphanagemanagement/view/modules/orphanage/userprofile/editprofile/edit_profile_page.dart';
+
 import 'package:orphanagemanagement/viewmodel/firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +73,7 @@ class _SupportSingleOrphanagePafeOrganizationState
                           image: DecorationImage(
                               fit: BoxFit.fill,
                               image: NetworkImage(
-                                data!.image!,
+                                "${data?.image}",
                               ))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,7 +121,7 @@ class _SupportSingleOrphanagePafeOrganizationState
                                     customeText(
                                         text: "120", textcolor: blue, size: 30),
                                     customeText(
-                                        text: "${data.childCount}",
+                                        text: "${data?.childCount}",
                                         textcolor: grey600,
                                         size: 15),
                                   ],
@@ -143,17 +142,8 @@ class _SupportSingleOrphanagePafeOrganizationState
                         ],
                       )),
                   const Gap(30),
-                  // customeGradientButtom(
-                  //     onpressed: () {
-                  //       setState(() {
-                  //         isSupporting = !isSupporting;
-                  //       });
-                  //     },
-                  //     context: context,
-                  //     text: isSupporting ? "Supporting" : "Support",
-                  //     fontWeight: FontWeight.w400,
-                  //     textcolor: white,
-                  //     bgColor: const MaterialStatePropertyAll(black)),
+                  
+                 
 
                   InkWell(
                     onTap: () {
@@ -187,7 +177,7 @@ class _SupportSingleOrphanagePafeOrganizationState
                   InkWell(
                     onTap: () {
                       Get.to(ChildListPageOrganization(
-                        childcount: 100,
+                        childcount: data?.childCount,
                       ));
                     },
                     child: Container(
@@ -223,7 +213,7 @@ class _SupportSingleOrphanagePafeOrganizationState
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          data.about,
+                          "${data?.about}",
                           style: GoogleFonts.jua(fontSize: 13),
                           overflow: isExpanded
                               ? TextOverflow.clip
@@ -284,11 +274,11 @@ class _SupportSingleOrphanagePafeOrganizationState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   customeText(
-                                      text: "${data.childCount}", size: 16),
+                                      text: "${data?.childCount}", size: 16),
                                   customeText(
-                                      text: "${data.contactNumber}", size: 16),
-                                  customeText(text: data.email, size: 16),
-                                  customeText(text: data.location, size: 16),
+                                      text: "${data?.contactNumber}", size: 16),
+                                  customeText(text: data?.email, size: 16),
+                                  customeText(text: data?.location, size: 16),
                                 ],
                               )
                             ],
@@ -342,13 +332,13 @@ class _SupportSingleOrphanagePafeOrganizationState
                                     MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  customeText(text: bankData!.bank, size: 16),
+                                  customeText(text: bankData?.bank, size: 16),
                                   customeText(
-                                      text: bankData.accountNumber, size: 16),
+                                      text: bankData?.accountNumber, size: 16),
                                   customeText(
-                                      text: bankData.epaymentnumber, size: 16),
+                                      text: bankData?.epaymentnumber, size: 16),
                                   customeText(
-                                      text: "${bankData.contactNumber}",
+                                      text: "${bankData?.contactNumber}",
                                       size: 16),
                                 ],
                               )

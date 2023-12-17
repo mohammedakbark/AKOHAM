@@ -32,6 +32,8 @@ class _SupportingPageInHomeIndividualState
     return Scaffold(
         body: Consumer<FireStore>(builder: (context, firestore, child) {
           final supportingdData = firestore.supportingList;
+
+          print("${firestore.supportingList?.length}");
           // print("${firestore.supportingList?.length}lllllllllllllll");
           return Container(
             height: hight,
@@ -72,14 +74,17 @@ class _SupportingPageInHomeIndividualState
                             itemBuilder: (context, index) => exploreOrphanages(
                                 location: supportingdData[index].location,
                                 onTap: () {
-                                  Get.to(
-                                      SupportSingleOrphanagePafeIndividual(orphnId: supportingdData[index].orphanageId,));
+                                  Get.to(SupportSingleOrphanagePafeIndividual(
+                                    orphnId: supportingdData[index].orphanageId,
+                                  ));
                                 },
                                 hight: hight,
                                 width: width,
                                 orphnName: supportingdData[index].name,
-                                numOfChile: supportingdData[index].numberOfChild,
-                                contNumber: supportingdData[index].contactNumber,
+                                numOfChile:
+                                    supportingdData[index].numberOfChild,
+                                contNumber:
+                                    supportingdData[index].contactNumber,
                                 srcimg: supportingdData[index].image),
                             separatorBuilder: (context, index) => Gap(20),
                             itemCount: supportingdData.length))
@@ -153,19 +158,19 @@ class _SupportingPageInHomeIndividualState
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
+                Container(
                   height: 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      srcimg,
-                    ),
-                  ),
+                  width: 100,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          fit: BoxFit.fill, image: NetworkImage(srcimg))),
                 ),
               ],
             ),
             SizedBox(
               height: 100,
+              width: 160,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,

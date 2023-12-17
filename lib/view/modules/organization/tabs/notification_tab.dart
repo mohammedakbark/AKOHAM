@@ -27,7 +27,8 @@ class _NotificationTabOrganizationState
   @override
   Widget build(BuildContext context) {
     Provider.of<ServiceProvider>(context, listen: false)
-        .fetchAllHelpRequest(context);
+        .fetchOnlySupportingOrphanageRequestOrganization(
+            context, currentUserId);
 
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -78,69 +79,69 @@ class _NotificationTabOrganizationState
             margin: const EdgeInsets.all(20),
             child: TabBarView(children: [
               ListView.separated(
-                  itemBuilder: (context, index) => notificationFromOrphanage(
-                      orphanageName: data[index].name,
-                      hight: hight,
-                      width: width,
-                      ontap: () {
-                         service.addDonationAcceptecetoFireStore(
-                              DonationAcceptedmodel(
-                                  orphanageId:
-                                      service.helpReqList[index].orphanId,
-                                  data:
-                                      "${storeInstence.orgnRegModel?.orgName} is intrested to Donate ${service.helpReqList[index].reqType}",
-                                  dateAndDay: "$date $day",
-                                  donationCategory:
-                                      service.helpReqList[index].reqType,
-                                  image: "${storeInstence.orgnRegModel?.image}",
-                                  time: time,
-                                  userType: "Organization",
-                                  userid: storeInstence.orgnRegModel?.orgId),
-                              context,
-                              service.helpReqList[index].orphanId);
-                          noti("Intrest Send Successfull");
-                      },
-                      requestDateAndDay: data[index].dataAndDay,
-                      requestTime: data[index].time,
-                      requestText: data[index].data,
-                      userImage: Image.network(
-                        data[index].image,
-                        fit: BoxFit.fill,
-                      )),
-                  separatorBuilder: (context, index) => Gap(20),
-                  itemCount: data.length),
+                itemBuilder: (context, index) => notificationFromOrphanage(
+                    orphanageName:
+                        service.supportingHelpReqList[index][index].name,
+                    hight: hight,
+                    width: width,
+                    ontap: () {
+                      service.addDonationAcceptecetoFireStore(
+                          DonationAcceptedmodel(
+                              orphanageId: service.helpReqList[index].orphanId,
+                              data:
+                                  "${storeInstence.orgnRegModel?.orgName} is intrested to Donate ${service.helpReqList[index].reqType}",
+                              dateAndDay: "$date $day",
+                              donationCategory:
+                                  service.helpReqList[index].reqType,
+                              image: "${storeInstence.orgnRegModel?.image}",
+                              time: time,
+                              userType: "Organization",
+                              userid: storeInstence.orgnRegModel?.orgId),
+                          context,
+                          service.helpReqList[index].orphanId);
+                      noti("Intrest Send Successfull");
+                    },
+                    requestDateAndDay:
+                        service.supportingHelpReqList[index][index].dataAndDay,
+                    requestTime:
+                        service.supportingHelpReqList[index][index].dataAndDay,
+                    requestText:
+                        service.supportingHelpReqList[index][index].data,
+                    userImage: NetworkImage(
+                      service.supportingHelpReqList[index][index].image,
+                      
+                    )),
+                separatorBuilder: (context, index) => Gap(20),
+                itemCount: service.supportingHelpReqList.length,
+              ),
               ListView.separated(
-              
                   itemBuilder: (context, index) => notificationFromOrphanage(
                       orphanageName: data[index].name,
                       width: width,
                       hight: hight,
                       ontap: () {
-                         service.addDonationAcceptecetoFireStore(
-                              DonationAcceptedmodel(
-                                  orphanageId:
-                                      service.helpReqList[index].orphanId,
-                                  data:
-                                      "${storeInstence.orgnRegModel!.orgName} is intrested to Donate ${service.helpReqList[index].reqType}",
-                                  dateAndDay: "$date $day",
-                                  donationCategory:
-                                      service.helpReqList[index].reqType,
-                                  image: "${storeInstence.orgnRegModel?.image}",
-                                  time: time,
-                                  userType: "Organization",
-                                  userid:  storeInstence.orgnRegModel?.orgId),
-                              context,
-                              service.helpReqList[index].orphanId);
-                          noti("Intrest Send Successfull");
+                        service.addDonationAcceptecetoFireStore(
+                            DonationAcceptedmodel(
+                                orphanageId:
+                                    service.helpReqList[index].orphanId,
+                                data:
+                                    "${storeInstence.orgnRegModel!.orgName} is intrested to Donate ${service.helpReqList[index].reqType}",
+                                dateAndDay: "$date $day",
+                                donationCategory:
+                                    service.helpReqList[index].reqType,
+                                image: "${storeInstence.orgnRegModel?.image}",
+                                time: time,
+                                userType: "Organization",
+                                userid: storeInstence.orgnRegModel?.orgId),
+                            context,
+                            service.helpReqList[index].orphanId);
+                        noti("Intrest Send Successfull");
                       },
-                         
-                       
                       requestDateAndDay: data[index].dataAndDay,
                       requestTime: data[index].time,
                       requestText: data[index].data,
-                      userImage: Image.network(
+                      userImage: NetworkImage(
                         data[index].image,
-                        fit: BoxFit.fill,
                       )),
                   separatorBuilder: (context, index) => const Gap(20),
                   itemCount: data.length),
@@ -185,13 +186,12 @@ class _NotificationTabOrganizationState
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(
+              Container(
                 height: 50,
                 width: 50,
-                child: ClipRRect(
-                  child: userImage,
-                  borderRadius: BorderRadius.circular(100),
-                ),
+                decoration: BoxDecoration(
+                    image: DecorationImage(fit: BoxFit.fill, image: userImage),
+                    shape: BoxShape.circle),
               ),
               const Gap(20),
               SizedBox(
@@ -205,8 +205,7 @@ class _NotificationTabOrganizationState
               ),
               const Gap(20),
               ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                   onPressed: ontap,
                   child: customeText(
                     text: "Intrested",

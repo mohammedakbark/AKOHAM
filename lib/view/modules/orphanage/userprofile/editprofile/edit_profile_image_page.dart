@@ -51,6 +51,7 @@ class _EditProfileImageOrphanageState extends State<EditProfileImageOrphanage> {
               decoration: BoxDecoration(
                   // color: Colors.amber,
                   image: DecorationImage(
+                      fit: BoxFit.fill,
                       image: widget.orphnRegModel.image!.isNotEmpty
                           ? NetworkImage(widget.orphnRegModel.image!)
                           : imageNotFound)),

@@ -44,94 +44,88 @@ class _ChildDetailsTabOrphanageState extends State<ChildDetailsTabOrphanage> {
             children: [
               const Gap(20),
               customeText(
-                  text: "Toatal no : ${controller.childList.length}",
+                  text:
+                      "Toatal no : ${storeInstence.orphnRegModel!.childCount > controller.childList.length ? controller.childList.length : storeInstence.orphnRegModel?.childCount}",
                   size: 20,
                   textcolor: grey600),
               const Gap(20),
               Expanded(
                   child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        final value = controller.childList[index];
-                        return InkWell(
-                          onTap: () {
-                            Get.to(() => SingleChildDataOrphanage(
-                                  childId: value.childId,
-                                ));
-                          },
-                          child: Container(
+                itemBuilder: (context, index) {
+                  final value = controller.childList[index];
+                  return InkWell(
+                    onTap: () {
+                      Get.to(() => SingleChildDataOrphanage(
+                            childId: value.childId,
+                          ));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: appThemeGrey),
+                      child: ListTile(
+                        leading: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: appThemeGrey),
-                            child: ListTile(
-                              leading: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: white),
-                                  height: 60,
-                                  width: 60,
-                                  child: controller
-                                          .childList[index].image.isEmpty
-                                      ? Image.asset(
-                                          "assets/user_.png",
-                                        )
-                                      : Image.network(
-                                          controller.childList[index].image)),
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      customeText(
-                                          text: "Name", textcolor: grey600),
-                                      customeText(
-                                          text: "Age", textcolor: grey600),
-                                      customeText(
-                                          text: "Gender", textcolor: grey600)
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      customeText(
-                                          text: ":", textcolor: grey600),
-                                      customeText(
-                                          text: ":", textcolor: grey600),
-                                      customeText(text: ":", textcolor: grey600)
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      customeText(
-                                          text: value.name, textcolor: grey600),
-                                      customeText(
-                                          text: value.age.toString(),
-                                          textcolor: grey600),
-                                      customeText(
-                                          text: value.gender,
-                                          textcolor: grey600)
-                                    ],
+                                borderRadius: BorderRadius.circular(10),
+                                color: white),
+                            height: 60,
+                            width: 60,
+                            child: controller.childList[index].image.isEmpty
+                                ? Image.asset(
+                                    "assets/user_.png",
                                   )
-                                ],
-                              ),
-                              trailing: IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 20,
-                                    color: grey600,
-                                  )),
+                                : Image.network(
+                                    controller.childList[index].image)),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                customeText(text: "Name", textcolor: grey600),
+                                customeText(text: "Age", textcolor: grey600),
+                                customeText(text: "Gender", textcolor: grey600)
+                              ],
                             ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) => const Gap(20),
-                      itemCount: controller.childList.length))
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                customeText(text: ":", textcolor: grey600),
+                                customeText(text: ":", textcolor: grey600),
+                                customeText(text: ":", textcolor: grey600)
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                customeText(
+                                    text: value.name, textcolor: grey600),
+                                customeText(
+                                    text: value.age.toString(),
+                                    textcolor: grey600),
+                                customeText(
+                                    text: value.gender, textcolor: grey600)
+                              ],
+                            )
+                          ],
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 20,
+                              color: grey600,
+                            )),
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => const Gap(20),
+                itemCount: storeInstence.orphnRegModel!.childCount >
+                        controller.childList.length
+                    ? controller.childList.length
+                    : storeInstence.orphnRegModel!.childCount,
+              ))
             ],
           ),
         ),

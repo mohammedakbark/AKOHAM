@@ -28,7 +28,7 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
   @override
   Widget build(BuildContext context) {
     Provider.of<ServiceProvider>(context, listen: false)
-        .fetchAllHelpRequest(context);
+        .fetchOnlySupportingOrphanageRequestIndividual(context, currentUserId);
     // final data = storeInstence.fetchAllOrphanages();
     print("${serviceProviderinstence.helpReqList.length}jvhhhhhhhhhh");
     final hight = MediaQuery.of(context).size.height;
@@ -84,7 +84,7 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
                     //     service.helpReqList[index].orphanId, index, );
 
                     return notificationFromOrphanage(
-                        orphanageName: service.helpReqList[index].name,
+                        orphanageName: service.supportingHelpReqList[index][index].name,
                         hight: hight,
                         width: width,
                         ontap: () {
@@ -107,16 +107,17 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
                               service.helpReqList[index].orphanId);
                           noti("Intrest Send Successfull");
                         },
-                        requestdateAndday:
-                            service.helpReqList[index].dataAndDay,
-                        time: service.helpReqList[index].time,
-                        requestText: service.helpReqList[index].data,
-                        userImage:
-                            NetworkImage(service.helpReqList[index].image) ??
-                                imageNotFound);
+                        requestdateAndday: service
+                            .supportingHelpReqList[index][index].dataAndDay,
+                        time: service.supportingHelpReqList[index][index].time,
+                        requestText:
+                            service.supportingHelpReqList[index][index].data,
+                        userImage: NetworkImage(service
+                                .supportingHelpReqList[index][index].image) ??
+                            imageNotFound);
                   },
-                  separatorBuilder: (context, index) => Gap(20),
-                  itemCount: service.helpReqList.length),
+                  separatorBuilder: (context, index) => const Gap(20),
+                  itemCount: service.supportingHelpReqList.length),
               ListView.separated(
                   itemBuilder: (context, index) => notificationFromOrphanage(
                       orphanageName: service.helpReqList[index].name,
@@ -195,9 +196,8 @@ class _NotificationTabIndividualState extends State<NotificationTabIndividual> {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: userImage),
-                  borderRadius: BorderRadius.circular(100),
-                ),
+                    image: DecorationImage(fit: BoxFit.fill, image: userImage),
+                    shape: BoxShape.circle),
               ),
               const Gap(20),
               SizedBox(

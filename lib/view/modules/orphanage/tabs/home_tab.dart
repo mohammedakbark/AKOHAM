@@ -76,6 +76,7 @@ class HomeTabOrphanage extends StatelessWidget {
                           : hight * .22,
                       decoration: BoxDecoration(
                           image: DecorationImage(
+                      fit: BoxFit.fill,
                         image: orphnRegModel.image!.isEmpty
                             ? imageNotFound
                             : NetworkImage(orphnRegModel.image!),

@@ -31,7 +31,6 @@ class _ExplorePageInHomeIndividualState
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
         body: Consumer<FireStore>(builder: (context, firestore, child) {
-          
           return Container(
             height: hight,
             width: width,
@@ -65,6 +64,7 @@ class _ExplorePageInHomeIndividualState
                 Expanded(
                     child: ListView.separated(
                         itemBuilder: (context, index) => exploreOrphanages(
+                            location: firestore.orphanageList[index].location,
                             onTap: () {
                               Get.to(ExploreSingleOrphanagePafeIndividual(
                                 orphnId: firestore.orphanageList[index].orphnId,
@@ -138,6 +138,7 @@ class _ExplorePageInHomeIndividualState
       orphnName,
       numOfChile,
       contNumber,
+      location,
       required dynamic srcimg,
       Function()? onTap}) {
     return InkWell(
@@ -161,12 +162,13 @@ class _ExplorePageInHomeIndividualState
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       // borderRadius: BorderRadius.circular(50),
-                      image: DecorationImage(image: srcimg)),
+                      image: DecorationImage(fit: BoxFit.fill, image: srcimg)),
                 ),
               ],
             ),
             SizedBox(
               height: 100,
+              width: 160,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -180,7 +182,7 @@ class _ExplorePageInHomeIndividualState
                         Icons.location_on_outlined,
                         color: blue,
                       ),
-                      customeText(text: "Location", textcolor: blue)
+                      customeText(text: location, textcolor: blue)
                     ]),
                   )
                 ],

@@ -6,17 +6,20 @@ import 'package:orphanagemanagement/model/orphanage/orphn_reg_model.dart';
 import 'package:orphanagemanagement/model/other_models/adoption_model.dart';
 import 'package:orphanagemanagement/model/other_models/donation_accepted_model.dart';
 import 'package:orphanagemanagement/model/other_models/help_request_model.dart';
+import 'package:orphanagemanagement/model/other_models/supporting_orphn_model.dart';
 import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/viewmodel/firebase_auth.dart';
 import 'package:orphanagemanagement/viewmodel/firestore.dart';
 
 class ServiceProvider with ChangeNotifier {
   List<HelpRequestModel> helpReqList = [];
-  HelpRequestModel? helpRequestModel;
+  dynamic list;
+  List<List<HelpRequestModel>> supportingHelpReqList = [];
+
   List<AdoptionModel> adoptionReqList = [];
-  AdoptionModel? adoptionModel;
+
   List<DonationAcceptedmodel> donationAcceptenceList = [];
-  DonationAcceptedmodel? donationAcceptedmodel;
+
   ////////////////////////////request/////////////////
   sendNewNotificationToUsers(HelpRequestModel helpRequestModel, context) {
     try {
@@ -43,6 +46,62 @@ class ServiceProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       return customeShowDiolog("$e", context);
+    }
+  }
+
+  fetchOnlySupportingOrphanageRequestIndividual(context, currentUID) async {
+    supportingHelpReqList.clear();
+    print(currentUID);
+    await fetchAllHelpRequest(context);
+    await storeInstence.getAllSupportingOrphanageinIndividual(currentUID);
+    for (int index = 0; index <= helpReqList.length; index++) {
+      for (int j = 0; j <= storeInstence.supportingList!.length; j++) {
+        QuerySnapshot<Map<String, dynamic>> notificationSnapshot = await db
+            .collection("Help Request")
+            .where("orphanId",
+                isEqualTo: storeInstence.supportingList?[index].orphanageId)
+            .get();
+        print(notificationSnapshot.docs.length);
+        list = notificationSnapshot.docs.map((e) {
+          return HelpRequestModel.fromJson(e.data());
+        }).toList();
+        notifyListeners();
+        print(list[index].name);
+        print("${list.length}kljkjkjkljljljlkjl");
+        // break;
+      }
+      supportingHelpReqList.add(list);
+      print(supportingHelpReqList.length);
+
+      // break;
+    }
+  }
+
+  fetchOnlySupportingOrphanageRequestOrganization(context, currentUID) async {
+    supportingHelpReqList.clear();
+    print(currentUID);
+    await fetchAllHelpRequest(context);
+    await storeInstence.getAllSupportingOrphanageinOrganization(currentUID);
+    for (int index = 0; index <= helpReqList.length; index++) {
+      for (int j = 0; j <= storeInstence.supportingList!.length; j++) {
+        QuerySnapshot<Map<String, dynamic>> notificationSnapshot = await db
+            .collection("Help Request")
+            .where("orphanId",
+                isEqualTo: storeInstence.supportingList?[index].orphanageId)
+            .get();
+        print(notificationSnapshot.docs.length);
+        list = notificationSnapshot.docs.map((e) {
+          return HelpRequestModel.fromJson(e.data());
+        }).toList();
+        notifyListeners();
+        print(list[index].name);
+        print("${list.length}kljkjkjkljljljlkjl");
+        // break;
+      }
+      supportingHelpReqList.add(list);
+      print(supportingHelpReqList.length);
+
+      // break;
     }
   }
 
@@ -92,10 +151,13 @@ class ServiceProvider with ChangeNotifier {
     }
   }
 
-  fetchAllDoanationAccepetence(context,currentuserId) async {
+  fetchAllDoanationAccepetence(context, currentuserId) async {
     try {
-      QuerySnapshot<Map<String, dynamic>> donationSnapshot =
-          await db.collection("Orphanage").doc(currentuserId).collection("Accepted Donations").get();
+      QuerySnapshot<Map<String, dynamic>> donationSnapshot = await db
+          .collection("Orphanage")
+          .doc(currentuserId)
+          .collection("Accepted Donations")
+          .get();
 
       donationAcceptenceList = donationSnapshot.docs.map((doc) {
         return DonationAcceptedmodel.fromJson(doc.data());

@@ -64,20 +64,23 @@ class _SupportingPageOrganizationState
                     child: ListView.separated(
                         itemBuilder: (context, index) => exploreOrphanages(
                               onTap: () {
-                                Get.to(
-                                    SupportSingleOrphanagePafeOrganization(selectedOrphnID: supportingdData[index].orphanageId,));
+                                Get.to(SupportSingleOrphanagePafeOrganization(
+                                  selectedOrphnID:
+                                      supportingdData?[index].orphanageId,
+                                ));
                               },
+                              location: supportingdData?[index].location,
                               hight: hight,
                               width: width,
-                              orphnName: supportingdData[index].name,
-                              numOfChile: supportingdData[index].numberOfChild,
-                              contNumber: supportingdData[index].contactNumber,
-                              srcimg: supportingdData[index].image == ""
+                              orphnName: supportingdData?[index].name,
+                              numOfChile: supportingdData?[index].numberOfChild,
+                              contNumber: supportingdData?[index].contactNumber,
+                              srcimg: supportingdData?[index].image == ""
                                   ? "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg"
-                                  : supportingdData[index].image,
+                                  : supportingdData![index].image,
                             ),
                         separatorBuilder: (context, index) => Gap(20),
-                        itemCount: supportingdData!.length))
+                        itemCount: supportingdData?.length??0))
               ],
             ),
           );
@@ -130,6 +133,7 @@ class _SupportingPageOrganizationState
       orphnName,
       numOfChile,
       contNumber,
+      location,
       required String srcimg,
       Function()? onTap}) {
     return InkWell(
@@ -147,19 +151,20 @@ class _SupportingPageOrganizationState
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
+                Container(
                   height: 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      srcimg,
-                    ),
+                  width: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill, image: NetworkImage(srcimg)),
                   ),
                 ),
               ],
             ),
             SizedBox(
               height: 100,
+              width: 150,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -173,7 +178,7 @@ class _SupportingPageOrganizationState
                         Icons.location_on_outlined,
                         color: blue,
                       ),
-                      customeText(text: "Location", textcolor: blue)
+                      customeText(text: location, textcolor: blue)
                     ]),
                   )
                 ],
