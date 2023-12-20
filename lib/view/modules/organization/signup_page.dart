@@ -160,48 +160,48 @@ class SignPageOrganization extends StatelessWidget {
                   ),
                 ),
                 Gap(20),
-                customeText(text: "Or creat using"),
-                Gap(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        firebaseAuths.signWithGoogle(context, 2);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: grey600!),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Image.asset(
-                            "assets/ggogle.png",
-                            scale: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Gap(10),
-                    InkWell(
-                      onTap: () {
-                        firebaseAuths.signInWithFacebook(context, 2);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: grey600!),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Image.asset(
-                            "assets/facebook.png",
-                            scale: 15,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                // customeText(text: "Or creat using"),
+                // Gap(20),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     InkWell(
+                //       onTap: () {
+                //         firebaseAuths.signWithGoogle(context, 2);
+                //       },
+                //       child: Container(
+                //         decoration: BoxDecoration(
+                //             border: Border.all(color: grey600!),
+                //             borderRadius: BorderRadius.circular(50)),
+                //         child: Padding(
+                //           padding: const EdgeInsets.all(6.0),
+                //           child: Image.asset(
+                //             "assets/ggogle.png",
+                //             scale: 15,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     Gap(10),
+                //     InkWell(
+                //       onTap: () {
+                //         firebaseAuths.signInWithFacebook(context, 2);
+                //       },
+                //       child: Container(
+                //         decoration: BoxDecoration(
+                //             border: Border.all(color: grey600!),
+                //             borderRadius: BorderRadius.circular(50)),
+                //         child: Padding(
+                //           padding: const EdgeInsets.all(6.0),
+                //           child: Image.asset(
+                //             "assets/facebook.png",
+                //             scale: 15,
+                //           ),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // ),
                 Gap(20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

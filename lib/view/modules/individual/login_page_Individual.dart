@@ -106,48 +106,48 @@ class LoginPageIndividual extends StatelessWidget {
                   ],
                 ),
                 const Gap(20),
-                customeText(text: "Or login using"),
-                const Gap(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        firebaseAuths.signWithGoogle(context, 1);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: grey600!),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Image.asset(
-                            "assets/ggogle.png",
-                            scale: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Gap(10),
-                    InkWell(
-                      onTap: () {
-                        firebaseAuths.signInWithFacebook(context, 1);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: grey600!),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Image.asset(
-                            "assets/facebook.png",
-                            scale: 15,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                )
+                // customeText(text: "Or login using"),
+                // const Gap(20),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     InkWell(
+                //       onTap: () {
+                //         firebaseAuths.signWithGoogle(context, 1);
+                //       },
+                //       child: Container(
+                //         decoration: BoxDecoration(
+                //             border: Border.all(color: grey600!),
+                //             borderRadius: BorderRadius.circular(50)),
+                //         child: Padding(
+                //           padding: const EdgeInsets.all(6.0),
+                //           child: Image.asset(
+                //             "assets/ggogle.png",
+                //             scale: 15,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     const Gap(10),
+                //     InkWell(
+                //       onTap: () {
+                //         firebaseAuths.signInWithFacebook(context, 1);
+                //       },
+                //       child: Container(
+                //         decoration: BoxDecoration(
+                //             border: Border.all(color: grey600!),
+                //             borderRadius: BorderRadius.circular(50)),
+                //         child: Padding(
+                //           padding: const EdgeInsets.all(6.0),
+                //           child: Image.asset(
+                //             "assets/facebook.png",
+                //             scale: 15,
+                //           ),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // )
               ],
             ),
           ),
