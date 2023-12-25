@@ -29,12 +29,12 @@ class FirebaseAuths {
     BuildContext context,
   ) async {
     try {
-   UserCredential   userCredential = await auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       uid = userCredential.user!.uid;
       print(
           "${uid.toString()}////////////////////////////////////////////////////////////////////");
-      setLoginPrefertrue();
+
     } catch (e) {
       customeShowDiolog("$e", context);
     }
@@ -46,6 +46,7 @@ class FirebaseAuths {
     try {
       if (FirebaseAuth.instance.currentUser != null &&
           !FirebaseAuth.instance.currentUser!.emailVerified) {
+        print("99999999999999999999999");
         await FirebaseAuth.instance.currentUser!.sendEmailVerification().then(
             (value) => customeShowDiolog(
                 "Varification email Send to your registered email address ${FirebaseAuth.instance.currentUser!.email} ",
@@ -61,18 +62,17 @@ class FirebaseAuths {
     try {
       UserCredential loginId = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      
+
       if (page == 0) {
         storeInstence.fetchCurrentOrphanage(loginId.user!.uid);
         noti("Login Successful");
-       
       } else if (page == 1) {
-         storeInstence.fetchCurrentIndividual(loginId.user!.uid);
+        storeInstence.fetchCurrentIndividual(loginId.user!.uid);
         noti("Login Successful");
       } else {
-         storeInstence.fetchCurrentOrganization(loginId.user!.uid);
-          noti("Login Successful");
-     //     ));
+        storeInstence.fetchCurrentOrganization(loginId.user!.uid);
+        noti("Login Successful");
+        //     ));
       }
       // });
       setLoginPrefertrue();
@@ -82,60 +82,60 @@ class FirebaseAuths {
   }
 ///////////////////////////////////////////////////////////////////////////////////////
 
-  Future signWithGoogle(context, page) async {
-    try {
-      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? gAuth = await gUser?.authentication;
-      final credential = GoogleAuthProvider.credential(
-          accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
-      return await FirebaseAuth.instance
-          .signInWithCredential(credential)
-          .then((value) => noti(
-                "Google sign successful",
-              ))
-          .then((value) {
-        if (page == 1) {
-          Get.offAll(() => MainPageIndividual(
-                selectedIndex: 1,
-              ));
-        } else if (page == 2) {
-          Get.offAll(() => MainPageOrganization(
-                selectedIndex: 1,
-              ));
-        }
-      });
-    } catch (e) {
-      return customeShowDiolog("$e", context);
-    }
-  }
+  // Future signWithGoogle(context, page) async {
+  //   try {
+  //     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+  //     final GoogleSignInAuthentication? gAuth = await gUser?.authentication;
+  //     final credential = GoogleAuthProvider.credential(
+  //         accessToken: gAuth?.accessToken, idToken: gAuth?.idToken);
+  //     return await FirebaseAuth.instance
+  //         .signInWithCredential(credential)
+  //         .then((value) => noti(
+  //               "Google sign successful",
+  //             ))
+  //         .then((value) {
+  //       if (page == 1) {
+  //         Get.offAll(() => MainPageIndividual(
+  //               selectedIndex: 1,
+  //             ));
+  //       } else if (page == 2) {
+  //         Get.offAll(() => MainPageOrganization(
+  //               selectedIndex: 1,
+  //             ));
+  //       }
+  //     });
+  //   } catch (e) {
+  //     return customeShowDiolog("$e", context);
+  //   }
+  // }
 
-  Future signInWithFacebook(context, page) async {
-    try {
-      final LoginResult loginResult = await FacebookAuth.instance.login();
+  // Future signInWithFacebook(context, page) async {
+  //   try {
+  //     final LoginResult loginResult = await FacebookAuth.instance.login();
 
-      final OAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+  //     final OAuthCredential facebookAuthCredential =
+  //         FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-      return FirebaseAuth.instance
-          .signInWithCredential(facebookAuthCredential)
-          .then((value) => noti(
-                "Facebook sign successful",
-              ))
-          .then((value) {
-        if (page == 1) {
-          Get.offAll(() => MainPageIndividual(
-                selectedIndex: 1,
-              ));
-        } else if (page == 2) {
-          Get.offAll(() => MainPageOrganization(
-                selectedIndex: 1,
-              ));
-        }
-      });
-    } catch (e) {
-      return customeShowDiolog("$e", context);
-    }
-  }
+  //     return FirebaseAuth.instance
+  //         .signInWithCredential(facebookAuthCredential)
+  //         .then((value) => noti(
+  //               "Facebook sign successful",
+  //             ))
+  //         .then((value) {
+  //       if (page == 1) {
+  //         Get.offAll(() => MainPageIndividual(
+  //               selectedIndex: 1,
+  //             ));
+  //       } else if (page == 2) {
+  //         Get.offAll(() => MainPageOrganization(
+  //               selectedIndex: 1,
+  //             ));
+  //       }
+  //     });
+  //   } catch (e) {
+  //     return customeShowDiolog("$e", context);
+  //   }
+  // }
 
   ///////////////////SIGNOUT//////////////////////////////////////
   ///
@@ -160,25 +160,25 @@ class FirebaseAuths {
   void signoutFromGoogle(context) {
     GoogleSignIn().signOut();
   }
-
- 
 }
- customeShowDiolog(String title, BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) => AlertDialog(
-        content: Text(title),
-        actions: <Widget>[
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"))
-        ],
-      ),
-    );
-  }
+
+customeShowDiolog(String title, BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) => AlertDialog(
+      content: Text(title),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK"))
+      ],
+    ),
+  );
+}
+
 void noti(msg) {
   Fluttertoast.showToast(
     msg: msg,

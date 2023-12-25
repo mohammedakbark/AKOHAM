@@ -237,8 +237,8 @@ class FireStore with ChangeNotifier {
 
   removeChild(chilId) async {
     final childRef = db.collection("Child Data");
-   childRef.doc(chilId).delete();
-   
+    childRef.doc(chilId).delete();
+
     // final subColectionRef = childRef.doc(chilId).collection("Helth Report");
     // subColectionRef.doc(subColectionRef.id).delete();
   }
@@ -275,7 +275,33 @@ class FireStore with ChangeNotifier {
   }
 
 ////////////////////////////////////////////////////////////
+fetchorphan(loginId)async{
+    print(loginId);
+    DocumentSnapshot orphanageSnapshot =
+        await db.collection("Orphanage").doc(loginId).get();
+    DocumentSnapshot bankSnapshot = await db
+        .collection("Orphanage")
+        .doc(loginId)
+        .collection("Bank Details")
+        .doc(loginId)
+        .get();
 
+    if (orphanageSnapshot.exists) {
+      orphnRegModel = OrphnRegModel.fromJson(
+          orphanageSnapshot.data() as Map<String, dynamic>);
+
+      print(orphanageSnapshot.data());
+      bankDetailModel =
+          BankDetailModel.fromJson(bankSnapshot.data() as Map<String, dynamic>);
+      print(
+          "------------fetch completed ,have the current user data---------------------");
+      notifyListeners();
+    
+    } else {
+      print("error");
+    }
+
+}
   fetchCurrentOrphanage(loginId) async {
     print(loginId);
     DocumentSnapshot orphanageSnapshot =
@@ -297,7 +323,7 @@ class FireStore with ChangeNotifier {
       print(
           "------------fetch completed ,have the current user data---------------------");
       notifyListeners();
-      Get.to(() => MainPageOrphanage(
+      Get.offAll(() => MainPageOrphanage(
             bankDetailModel: bankDetailModel,
             orphnRegModel: orphnRegModel,
           ));
@@ -305,7 +331,22 @@ class FireStore with ChangeNotifier {
       print("error");
     }
   }
+fetchCurrentIndividualNow(loginId) async {
+    DocumentSnapshot individualSnapshot =
+        await db.collection("Individual").doc(loginId).get();
 
+    if (individualSnapshot.exists) {
+      indivRegModel = IndivRegModel.fromJson(
+          individualSnapshot.data() as Map<String, dynamic>);
+      print(
+          "------------fetch completed ,have the current user data---------------------");
+      print("------------fetch completed individual---------------------");
+      notifyListeners();
+     
+    } else {
+      print("error");
+    }
+  }
   fetchCurrentIndividual(loginId) async {
     DocumentSnapshot individualSnapshot =
         await db.collection("Individual").doc(loginId).get();
@@ -317,10 +358,28 @@ class FireStore with ChangeNotifier {
           "------------fetch completed ,have the current user data---------------------");
       print("------------fetch completed individual---------------------");
       notifyListeners();
-      Get.to(() => MainPageIndividual(
+      Get.offAll(() => MainPageIndividual(
             selectedIndex: 1,
             // indivRegModel: indivRegModel,
           ));
+    } else {
+      print("error");
+    }
+  }
+
+   fetchOrganizationnow(loginId) async {
+    print(loginId);
+    DocumentSnapshot organizationSnapshot =
+        await db.collection("Organization").doc(loginId).get();
+
+    if (organizationSnapshot.exists) {
+      orgnRegModel = OrgnRegModel.fromJson(
+          organizationSnapshot.data() as Map<String, dynamic>);
+      print(
+          "------------fetch completed ,have the current user data---------------------");
+      print("------------fetch completed Organization---------------------");
+      notifyListeners();
+     
     } else {
       print("error");
     }
@@ -338,7 +397,7 @@ class FireStore with ChangeNotifier {
           "------------fetch completed ,have the current user data---------------------");
       print("------------fetch completed Organization---------------------");
       notifyListeners();
-      Get.to(() => MainPageOrganization(
+      Get.offAll(() => MainPageOrganization(
             selectedIndex: 1,
           ));
     } else {

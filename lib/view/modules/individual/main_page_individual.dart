@@ -11,30 +11,35 @@ import 'package:orphanagemanagement/view/modules/orphanage/tabs/childdetails_tab
 import 'package:orphanagemanagement/view/modules/orphanage/tabs/home_tab.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/tabs/profile_tab.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/tabs/settings_tab.dart';
+import 'package:orphanagemanagement/viewmodel/firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
 class MainPageIndividual extends StatefulWidget {
   int selectedIndex = 1;
   // IndivRegModel ?indivRegModel;
-  MainPageIndividual({super.key, required this.selectedIndex,});
+  MainPageIndividual({
+    super.key,
+    required this.selectedIndex,
+  });
 
   @override
   State<MainPageIndividual> createState() => _MainPageIndividualState();
 }
 
 class _MainPageIndividualState extends State<MainPageIndividual> {
- 
-
   @override
   Widget build(BuildContext context) {
-     List<Widget> pages = [
-    NotificationTabIndividual(),
-    HomeTabIndividual(),
-    ProfileTabIndividual(
-      indivRegModel: storeInstence.indivRegModel!,
-      // indivRegModel:widget.indivRegModel!
-    )
-  ];
+    Provider.of<FireStore>(context,listen: false)
+        .fetchCurrentIndividualNow(firebaseAuth.currentUser!.uid);
+    List<Widget> pages = [
+      NotificationTabIndividual(),
+      HomeTabIndividual(),
+      ProfileTabIndividual(
+        indivRegModel: storeInstence.indivRegModel!,
+        // indivRegModel:widget.indivRegModel!
+      )
+    ];
     return Scaffold(
         body: pages[widget.selectedIndex],
         bottomNavigationBar: BottomNavigationBar(

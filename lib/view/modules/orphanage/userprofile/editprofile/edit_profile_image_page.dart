@@ -14,9 +14,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileImageOrphanage extends StatefulWidget {
-  OrphnRegModel orphnRegModel;
+  // OrphnRegModel orphnRegModel;
   EditProfileImageOrphanage({
-    required this.orphnRegModel,
+    // required this.orphnRegModel,
     super.key,
   });
 
@@ -52,8 +52,8 @@ class _EditProfileImageOrphanageState extends State<EditProfileImageOrphanage> {
                   // color: Colors.amber,
                   image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: widget.orphnRegModel.image!.isNotEmpty
-                          ? NetworkImage(widget.orphnRegModel.image!)
+                      image: "${storeInstence. orphnRegModel?.image}".isNotEmpty
+                          ? NetworkImage("${storeInstence. orphnRegModel?.image}")
                           : imageNotFound)),
             ),
             Gap(20),

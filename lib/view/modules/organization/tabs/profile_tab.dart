@@ -85,7 +85,7 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                         ),
                       ),
                       customeText(
-                          text: storeInstence.orgnRegModel!.orgName, size: 24),
+                          text: storeInstence.orgnRegModel?.orgName, size: 24),
                       Stack(
                         alignment: Alignment.topCenter,
                         children: [
@@ -106,7 +106,7 @@ class _ProfileTabOrganizationState extends State<ProfileTabOrganization> {
                                 image: DecorationImage(
                                     fit: BoxFit.fill,
                                     image:
-                                        storeInstence.orgnRegModel!.image == ""
+                                        storeInstence.orgnRegModel?.image == ""
                                             ? imageNotFound
                                             : NetworkImage(storeInstence
                                                 .orgnRegModel!.image!))),

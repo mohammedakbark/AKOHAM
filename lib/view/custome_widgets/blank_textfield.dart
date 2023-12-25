@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 Widget BlankTextField(
     {context,
+    bool enabled = true,
     TextEditingController? controller,
     hintText,
     double? fielSize,
@@ -11,10 +12,13 @@ Widget BlankTextField(
     String? Function(String?)? validator,
     maxLength}) {
   return SizedBox(
+    // color: Colors.red,
+    // height: 70,
     width: fielSize ?? MediaQuery.of(context).size.width * .4,
     child: TextFormField(
+      enabled: enabled,
       // maxLength: maxLength,
-      
+
       validator: validator,
       maxLines: maxline,
       controller: controller,

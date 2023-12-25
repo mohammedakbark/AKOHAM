@@ -137,20 +137,11 @@ class SignPageOrganization extends StatelessWidget {
                   child: customeGradientButtom(
                     onpressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        await firebaseAuths.sign(
-                          emailController.text,
-                          passwordController.text,
-                          context,
-                        );
-                        await storeInstence.addUsertoLoginTable(
-                            firebaseAuths.uid,
-                            LoginTable(
-                                email: emailController.text,
-                                loginId: firebaseAuths.uid!,
-                                type: "Organization"));
+                       
+                       
                         Get.to(NextSignPageOrganization(
                           email: emailController,
-                          uid: firebaseAuths.uid,
+                          password: passwordController,
                         ));
                       }
                     },

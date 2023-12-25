@@ -6,14 +6,15 @@ import 'package:orphanagemanagement/model/organization/orgna_reg_model.dart';
 import 'package:orphanagemanagement/model/orphanage/orphn_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/utils/images.dart';
+import 'package:orphanagemanagement/utils/variables.dart';
 import 'package:orphanagemanagement/view/custome_widgets/custome_text.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/Notification/Notification_category_page.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/sendrequestPages/send_request_page.dart';
 import 'package:orphanagemanagement/view/modules/orphanage/userprofile/editprofile/edit_profile_image_page.dart';
 
 class HomeTabOrphanage extends StatelessWidget {
-  OrphnRegModel orphnRegModel;
-  HomeTabOrphanage({super.key, required this.orphnRegModel});
+  // OrphnRegModel orphnRegModel;
+  HomeTabOrphanage({super.key, });
   List<Image> ImageList = [
     Image.asset("assets/Cash.png"),
     Image.asset("assets/Food Bar.png"),
@@ -68,7 +69,7 @@ class HomeTabOrphanage extends StatelessWidget {
                     color: appThemeGrey,
                   ),
                   child: Column(children: [
-                    customeText(text: orphnRegModel.orphnName),
+                    customeText(text:"${storeInstence. orphnRegModel?.orphnName}"),
                     Container(
                       width: width * .9,
                       height: orientation == landScapeMode
@@ -77,9 +78,9 @@ class HomeTabOrphanage extends StatelessWidget {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                       fit: BoxFit.fill,
-                        image: orphnRegModel.image!.isEmpty
+                        image: "${storeInstence. orphnRegModel?.image}".isEmpty
                             ? imageNotFound
-                            : NetworkImage(orphnRegModel.image!),
+                            : NetworkImage("${storeInstence. orphnRegModel?.image}"),
                       )),
                     ),
                     SizedBox(
@@ -90,7 +91,7 @@ class HomeTabOrphanage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           Get.to(EditProfileImageOrphanage(
-                            orphnRegModel: orphnRegModel,
+                            // orphnRegModel: orphnRegModel,
                           ));
                         },
                         style: ButtonStyle(

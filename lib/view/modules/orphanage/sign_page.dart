@@ -140,23 +140,21 @@ class SignPageOrphanage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        await firebaseAuths.sign(
-                          emailController.text,
-                          passwordController.text,
-                          context,
-                        );
+                 await       Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NextSignPageOrphanage(
+                                      email: emailController,
+                                      // uid: firebaseAuths.uid!,
+                                      passwordController: passwordController,
+                                    )),
+                            (route) => false);
 
-                        await storeInstence.addUsertoLoginTable(
-                            firebaseAuths.uid,
-                            LoginTable(
-                                email: emailController.text,
-                                loginId: firebaseAuths.uid!,
-                                type: "Orphanage"));
-
-                        Get.to(NextSignPageOrphanage(
-                          email: emailController,
-                          uid: firebaseAuths.uid!,
-                        ));
+                        // Get.to(NextSignPageOrphanage(
+                        //   email: emailController,
+                        //   uid: firebaseAuths.uid!,
+                        //   passwordController: passwordController,
+                        // ));
                       }
                     },
                     style: ButtonStyle(

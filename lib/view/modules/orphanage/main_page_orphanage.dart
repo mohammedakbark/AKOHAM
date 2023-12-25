@@ -24,15 +24,16 @@ class _MainPageOrphanageState extends State<MainPageOrphanage> {
 
   @override
   Widget build(BuildContext context) {
- 
+    Provider.of<FireStore>(context, listen: false)
+        .fetchorphan(firebaseAuth.currentUser!.uid);
     // Provider.of<FireStore>(context, listen: false)
     // .fetchCurrentOrphanage(currentUserId);
 
     // print(widget.orphnRegModel!.email);
     List<Widget> pages = [
       HomeTabOrphanage(
-        orphnRegModel: widget.orphnRegModel!,
-      ),
+          // orphnRegModel: widget.orphnRegModel!,
+          ),
       const ChildDetailsTabOrphanage(),
       ProfileTabOrphanage(
         orphnRegModel: widget.orphnRegModel!,
