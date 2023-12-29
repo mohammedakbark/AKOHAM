@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 
@@ -12,9 +13,13 @@ Widget customeTextField(
     prefixicon,
     fillcolor,
     obsecure,
+    TextInputType? keyboardType,
+    Function()?onTap,
     String? Function(String?)? validator,
     void Function(String)? onSubmitted}) {
   return TextFormField(
+    keyboardType: keyboardType,
+    onTap:onTap ,
     validator: validator,
     onFieldSubmitted: onSubmitted,
     obscureText: obsecure ?? false,

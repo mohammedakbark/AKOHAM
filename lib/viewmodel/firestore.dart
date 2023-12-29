@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,6 +33,11 @@ class FireStore with ChangeNotifier {
   OrgnRegModel? orgnRegModel;
   List<SupportingOrphanModel>? supportingList;
   SupportingOrphanModel? supportingOrphanModel;
+
+  /////////////////////////
+
+  TextEditingController serchController = TextEditingController();
+
 ////////////////////////////ORPHANAGE//////////////////////////
   List<OrphnRegModel> orphanageList = [];
   List<BankDetailModel> bankList = [];
@@ -275,7 +281,7 @@ class FireStore with ChangeNotifier {
   }
 
 ////////////////////////////////////////////////////////////
-fetchorphan(loginId)async{
+  fetchorphan(loginId) async {
     print(loginId);
     DocumentSnapshot orphanageSnapshot =
         await db.collection("Orphanage").doc(loginId).get();
@@ -296,12 +302,11 @@ fetchorphan(loginId)async{
       print(
           "------------fetch completed ,have the current user data---------------------");
       notifyListeners();
-    
     } else {
       print("error");
     }
+  }
 
-}
   fetchCurrentOrphanage(loginId) async {
     print(loginId);
     DocumentSnapshot orphanageSnapshot =
@@ -331,7 +336,8 @@ fetchorphan(loginId)async{
       print("error");
     }
   }
-fetchCurrentIndividualNow(loginId) async {
+
+  fetchCurrentIndividualNow(loginId) async {
     DocumentSnapshot individualSnapshot =
         await db.collection("Individual").doc(loginId).get();
 
@@ -342,11 +348,11 @@ fetchCurrentIndividualNow(loginId) async {
           "------------fetch completed ,have the current user data---------------------");
       print("------------fetch completed individual---------------------");
       notifyListeners();
-     
     } else {
       print("error");
     }
   }
+
   fetchCurrentIndividual(loginId) async {
     DocumentSnapshot individualSnapshot =
         await db.collection("Individual").doc(loginId).get();
@@ -367,7 +373,7 @@ fetchCurrentIndividualNow(loginId) async {
     }
   }
 
-   fetchOrganizationnow(loginId) async {
+  fetchOrganizationnow(loginId) async {
     print(loginId);
     DocumentSnapshot organizationSnapshot =
         await db.collection("Organization").doc(loginId).get();
@@ -379,7 +385,6 @@ fetchCurrentIndividualNow(loginId) async {
           "------------fetch completed ,have the current user data---------------------");
       print("------------fetch completed Organization---------------------");
       notifyListeners();
-     
     } else {
       print("error");
     }
@@ -615,4 +620,6 @@ fetchCurrentIndividualNow(loginId) async {
 
     notifyListeners();
   }
+
+ 
 }

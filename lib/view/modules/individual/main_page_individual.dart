@@ -34,7 +34,7 @@ class _MainPageIndividualState extends State<MainPageIndividual> {
         .fetchCurrentIndividualNow(firebaseAuth.currentUser!.uid);
     List<Widget> pages = [
       NotificationTabIndividual(),
-      HomeTabIndividual(),
+   const    HomeTabIndividual(),
       ProfileTabIndividual(
         indivRegModel: storeInstence.indivRegModel!,
         // indivRegModel:widget.indivRegModel!

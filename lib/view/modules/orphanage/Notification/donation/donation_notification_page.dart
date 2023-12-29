@@ -30,7 +30,7 @@ class DonationNotifiOrphanage extends StatelessWidget {
                   children: [
                     const Gap(20),
                     Expanded(
-                      child: ListView.separated(
+                      child:service.adoptionReqList.isEmpty?SizedBox(child: Center(child: customeText(text:"Data Not Found", textcolor: grey600, size: 10),),) : ListView.separated(
                           itemBuilder: (context, index) => donationReplay(
                               ontap: () {
                                 Get.to(DonatedUserProfileOrphanage(

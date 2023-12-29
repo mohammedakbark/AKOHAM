@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:orphanagemanagement/model/organization/orgna_reg_model.dart';
 import 'package:orphanagemanagement/model/orphanage/orphn_reg_model.dart';
 import 'package:orphanagemanagement/utils/colors.dart';
 import 'package:orphanagemanagement/utils/images.dart';
@@ -42,6 +46,21 @@ class _ExplorePageInHomeIndividualState
                 customeText(text: "Home", size: 26),
                 Gap(20),
                 customeTextField(
+                  onSubmitted: (value) {
+                    // OrphnRegModel searchUserByName(String searchName) {
+                    //   return firestore.orphanageList.firstWhere(
+                    //     (element) =>
+                    //         element.orphnName.toLowerCase() ==
+                    //         searchName.toLowerCase(),
+                    //     orElse: () => null,
+                    //   ); // Ret)
+                    //   // return firestore.orphanageList.firstWhere(
+                    //   //   (user) => user..toLowerCase() == searchName.toLowerCase(),
+                    //   //   orElse: () => null, // Return null if not found
+                    //   // );
+                    // }
+                  },
+                  controller: firestore.serchController,
                   prefixicon: Image.asset(
                     "assets/search.png",
                     scale: 20,

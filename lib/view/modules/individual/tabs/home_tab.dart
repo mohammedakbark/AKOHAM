@@ -18,7 +18,7 @@ class HomeTabIndividual extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        leading:const SizedBox(),
+        leading: const SizedBox(),
         title: customeText(text: "Home", size: 26),
       ),
       body: Container(
@@ -29,8 +29,10 @@ class HomeTabIndividual extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-           const   Gap(30),
+              const Gap(30),
               customeTextField(
+                keyboardType: TextInputType.none,
+                onTap: () => Get.to(() => const ExplorePageInHomeIndividual()),
                 prefixicon: Image.asset(
                   "assets/search.png",
                   scale: 20,
